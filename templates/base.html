@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <script src="{{ url_for('static', filename='jquery/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='script/base.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap@5.1.1.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="container-fluid navbar navbar-light bg-light fixed-top" id="nav-bar">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" id="menu-btn" onclick="side()">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Offcanvas navbar</a>
+        </div>
+    </nav>
+    <div class="container-fluid" id="main-body">
+        <div class="side-menu" id="side-menu">
+        </div>
+    </div>
+</body>
+</html>
