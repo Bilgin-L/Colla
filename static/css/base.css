@@ -1,5 +1,13 @@
 #nav-bar{
     position: relative !important;
+    background-color: #FFB11B!important;
+    height: 44px;
+    font-family: "Yellowtail", serif;
+    align-content: center!important;
+}
+
+.navbar-brand{
+    font-size: 28px;
 }
 
 #menu-btn:checked~#side-menu{
@@ -7,14 +15,207 @@
 }
 
 #main-body{
+    display: flex;
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
 #side-menu{
+    position: relative;
     display: flex;
     width: 255px;
-    background-color: #e80b0b;
-    height: calc(100vh - 56px);
+    background-color: #FAFAFA;
+    height: calc(100vh - 44px);
     transition: ease .5s;
+    padding-top: 30px;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+#search-bar{
+    height: 34px;
+    width: inherit;
+    padding-left: 20px;
+    padding-right: 10px;
+}
+
+#search-btn{
+    background-color: #FFB11B!important;
+    display: flex;
+    border-color: unset!important;
+    align-items: center;
+    border-radius: 50%;
+    height: 100%;
+    width: 34px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#search-btn:hover{
+    background-color: #d38f10 !important;
+}
+
+input[type=text]:focus {
+    border-color: unset!important;
+    box-shadow: unset !important;
+}
+
+button[type=button]:focus {
+    border-color: unset!important;
+    box-shadow: unset !important;
+}
+
+#side-list{
+    flex-wrap: nowrap;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 0!important;
+}
+
+.list-items{
+    display: flex;
+    white-space: nowrap;
+    height: 34px;
+    width: 100%;
+    align-items: center;
+    overflow: hidden;
+    color: #2B2B2B!important;
+    font-size: 14px!important;
+    flex-wrap: wrap;
+    padding-bottom: 28px;
+}
+
+.active{
+    background-color: #EEEEEE!important;
+}
+
+#side-list>li{
+    margin-bottom: 5px;
+}
+
+.list-items:hover{
+    background-color: #EEEEEE!important;
+}
+
+.side-title{
+    position: relative;
+    display: flex;
+    padding-left: 35px;
+    padding-right: 10px;
+    align-items: center;
+    margin-bottom: 7px;
+}
+
+p{
+    margin-bottom: 0!important;
+}
+
+#category_list{
+    font-weight: bold;
+    font-size: 14px;
+    color: #6E6E6E;
+}
+
+button,
+input {
+    font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+    border: 0;
+    outline: none;
+}
+
+.side-title-btn{
+    position: absolute;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+    text-align: center;
+    height: 28px;
+    width: 28px;
+    border-radius: 5px;
+    background-color: #FAFAFA;
+    transition: ease .4s;
+}
+
+.side-title-btn:hover{
+    background-color: #EEEEEE;
+}
+
+#side-title-btn1{
+    right: 40px;
+}
+
+#side-title-btn2{
+    transition: transform .4s ease;
+}
+
+.side-list2{
+    height: 170px;
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.side-bottom{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.circle{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.list-items2{
+    position: relative;
+    display: flex;
+    white-space: nowrap;
+    height: 34px;
+    width: 100%;
+    align-items: center;
+    overflow: hidden;
+    color: #2B2B2B!important;
+    font-size: 14px!important;
+}
+
+.list-items2:hover{
+    background-color: #EEEEEE!important;
+}
+
+.list-items2:hover #edit-btn{
+    visibility: visible;
+}
+
+.list-items2:hover #delete-btn{
+    visibility: visible;
+}
+
+#delete-btn{
+    visibility: hidden;
+    right: 40px;
+    background-color: transparent!important;
+    transition: visibility .1s ease;
+}
+
+#edit-btn{
+    visibility: hidden;
+    right: 10px;
+    background-color: transparent!important;
+    transition: visibility .1s ease;
+}
+
+#delete-btn:hover{
+    background-color: #FAFAFA!important;
+}
+
+#edit-btn:hover{
+    background-color: #FAFAFA!important;
 }
