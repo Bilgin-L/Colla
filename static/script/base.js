@@ -1,3 +1,28 @@
+window.onload=function ()
+{
+    displayWindowSize();
+}
+
+window.addEventListener("resize", displayWindowSize);
+
+function displayWindowSize(){
+    var container = document.getElementsByClassName("side-list3")[0];
+    var side = document.getElementById("side-menu");
+    var container2 = document.getElementById("container-box");
+    var center = document.getElementById("center-box");
+    container.style.height = "calc(100vh - 485px)"
+    if (document.body.clientWidth < 750){
+        side.style.width = "0px";
+        container2.style.width = "100vw";
+        side.style.zIndex = "100";
+        center.style.width = "90vw";
+    } else {
+        side.style.width = "255px";
+        center.style.width = "calc(100vw - 500px)";
+        container2.style.width = "calc(100vw - 255px)";
+    }
+}
+
 function side() {
     var side = document.getElementById("side-menu");
     var container = document.getElementById("container-box");
@@ -6,7 +31,11 @@ function side() {
         container.style.width = "100vw";
     } else {
         side.style.width = "255px";
-        container.style.width = "calc(100vw - 255px)";
+        if (document.body.clientWidth >= 750){
+            container.style.width = "calc(100vw - 255px)";
+        } else {
+            container.style.width = "100vw";
+        }
     }
 }
 
@@ -18,3 +47,4 @@ function rotate() {
         id.style.transform = "rotate(0deg)";
     }
 }
+

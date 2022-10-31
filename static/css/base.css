@@ -21,7 +21,8 @@
 }
 
 #side-menu{
-    position: relative;
+    z-index: 100;
+    position: fixed;
     display: flex;
     width: 255px;
     background-color: #FAFAFA;
@@ -66,6 +67,13 @@ button[type=button]:focus {
 }
 
 #side-list{
+    flex-wrap: nowrap;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 0!important;
+}
+
+.side-list3{
     flex-wrap: nowrap;
     margin-left: 20px;
     margin-right: 20px;
@@ -151,7 +159,6 @@ input {
 }
 
 .side-list2{
-    height: 170px;
     overflow: scroll;
     overflow-x: hidden;
     overflow-y: auto;
