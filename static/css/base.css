@@ -2,11 +2,11 @@
     position: relative !important;
     background-color: #FFB11B!important;
     height: 44px;
-    font-family: "Yellowtail", serif;
     align-content: center!important;
 }
 
 .navbar-brand{
+    font-family: "Yellowtail", serif;
     font-size: 28px;
 }
 
@@ -112,6 +112,42 @@ button[type=button]:focus {
     padding-right: 10px;
     align-items: center;
     margin-bottom: 7px;
+}
+
+.notification{
+    width: 300px;
+}
+
+.notification-items{
+    width: 100%;
+    /*background-color: #0a53be;*/
+    height: fit-content;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-top-color: #8a8a8a;
+    border-bottom-color: #8a8a8a;
+    border-left-style: hidden;
+    border-right-style: hidden;
+}
+
+.notification-items-contents{
+    font-size: 14px;
+    color: #484848;
+}
+
+.notification-items-time{
+    font-size: 12px;
+    color: #a9a9a9;
+}
+
+.notification-clear{
+    transition: ease .4s;
+}
+
+.notification-clear:hover{
+    background-color: #e1e1e1;
 }
 
 p{
@@ -225,4 +261,60 @@ input {
 
 #edit-btn:hover{
     background-color: #FAFAFA!important;
+}
+
+.message-info{
+    position: absolute;
+    right: 70px;
+    cursor: pointer;
+}
+
+.add-btn{
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+.add-information{
+    font-size: 14px;
+    color: #a4a4a4;
+}
+
+.add-input:focus{
+    border-color: #FFB11B;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(253, 177, 13, 0.25);
+}
+
+#add-container{
+    width: 40%;
+}
+
+.modal-body-row{
+    margin-bottom: 10px;
+}
+
+.mail-notifier-check{
+    transition: ease .3s;
+}
+
+.mail-notifier-check:checked{
+    background-color: #FFB11B;
+    border-color: #FFB11B;
+}
+
+.mail-notifier-check:focus{
+    border-color: #FFB11B;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(253, 177, 13, 0.25);
+}
+
+.mail-notifier-check:hover{
+    border-color: #FFB11B;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(253, 177, 13, 0.25);
+}
+
+.modal-footer{
+    justify-content: space-between;
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='jquery/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='script/base.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap@5.1.1.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <title>Colla - Login</title>
+</head>
+<body>
+<nav class="container-fluid navbar navbar-light fixed-top" id="nav-bar" style="justify-content: center;">
+    <a class="navbar-brand">Colla</a>
+</nav>
+<div class="login-bg">
+    <div class="login-container">
+    <div class="login-container-decoration"></div>
+    <p class="login-title">Login</p>
+    <form>
+        <div class="mb-3 mt-3">
+            <label for="email" class="form-label">Username:</label>
+            <input class="form-control add-input" id="email" placeholder="Enter username" name="username">
+        </div>
+        <div class="mb-3">
+            <label for="pwd" class="form-label">Password:</label>
+            <input type="password" class="form-control add-input" id="pwd" placeholder="Enter password" name="pswd">
+        </div>
+        <div class="form-check mb-3">
+            <label class="form-check-label">
+                <input class="form-check-input mail-notifier-check" type="checkbox" name="remember"> Remember me
+            </label>
+        </div>
+        <button type="submit" class="login-btn mail-notifier-check">Submit</button>
+        <p class="login-reg">If you don't have an account, <a href="base.html" class="login-reg-link">register in!</a></p>
+    </form>
+</div>
+</div>
+</body>
+</html>

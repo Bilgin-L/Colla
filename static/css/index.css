@@ -137,6 +137,13 @@
     text-overflow:ellipsis;
     font-size: 14px;
     margin-bottom: 3px;
+    color: black;
+    text-decoration: none;
+}
+
+.task-name:hover{
+    text-decoration: underline;
+    color: black;
 }
 
 p{
@@ -225,4 +232,24 @@ p{
     background-color: #eeeeee;
 }
 
+#details{
+    width: 300px;
+}
+
+.notification-clear-share{
+    margin-bottom: 3px;
+}
+
+.task-items-detail{
+    height: 350px;
+    width: 100%;
+    font-size: 14px;
+    border-style: solid;
+    border-right: hidden;
+    border-left: hidden;
+}
+
+.task-items-title{
+    font-weight: bold;
+}
 
