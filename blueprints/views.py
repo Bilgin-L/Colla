@@ -13,7 +13,12 @@ bp = Blueprint("views", __name__, url_prefix="/")
 
 @bp.route("/")
 def index():
-    return render_template("index.html")
+    user_id = session.get("user_id")
+    if user_id:
+        user = UserModel.query.get(user_id)
+        return render_template("index.html", user=user)
+    else:
+        return redirect(url_for("views.login"))
 
 
 @bp.route("/register", methods=['GET', 'POST'])
@@ -84,9 +89,12 @@ def login():
             password = form.password.data
             user = UserModel.query.filter_by(email=email).first()
             if user and check_password_hash(user.password, password):
+                session['user_id'] = user.id
                 rememverme = request.form.getlist("remember")
-                if "remember" in rememverme:
-                    session['user_id'] = user.id
+                if "rememberme" in rememverme:
+                    session['remember'] = "true"
+                else:
+                    session['remember'] = "false"
                 return redirect("/")
             else:
                 flash("Password or email is wrong! ")
