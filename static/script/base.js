@@ -1,18 +1,24 @@
-window.onload=function ()
-{
+window.onload = function () {
     displayWindowSize();
+    var edit_button_list = $(".edit-btn-list");
+    for (var i = 0; i < edit_button_list.length; i++) {
+        edit_button_list[i].addEventListener("click", function (event) {
+            event.stopPropagation();
+            $('#category').modal('show');
+        })
+    }
 }
 
 window.addEventListener("resize", displayWindowSize);
 
-function displayWindowSize(){
+function displayWindowSize() {
     var container = document.getElementsByClassName("side-list3")[0];
     var side = document.getElementById("side-menu");
     var container2 = document.getElementById("container-box");
     var center = document.getElementById("center-box");
     var add_container = document.getElementById("add-container");
     container.style.height = "calc(100vh - 485px)"
-    if (document.body.clientWidth < 750){
+    if (document.body.clientWidth < 750) {
         side.style.width = "0px";
         container2.style.width = "100vw";
         side.style.zIndex = "100";
@@ -35,7 +41,7 @@ function side() {
         container.style.width = "100vw";
     } else {
         side.style.width = "255px";
-        if (document.body.clientWidth >= 750){
+        if (document.body.clientWidth >= 750) {
             container.style.width = "calc(100vw - 255px)";
         } else {
             container.style.width = "100vw";
@@ -52,3 +58,13 @@ function rotate() {
     }
 }
 
+function deleteCategory(obj, id){
+    obj.parentNode.parentNode.removeChild(obj.parentNode);
+    $.ajax({
+        url: "/delete_category",
+        method: "POST",
+        data: {
+            "category_id": id
+        }
+    })
+}

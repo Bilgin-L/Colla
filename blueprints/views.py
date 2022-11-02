@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session, g, jsonify
-from models import EmailCaptchaModel, UserModel
+from models import EmailCaptchaModel, UserModel, CategoryModel
 from .forms import RegisterForm, LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import mail, db
@@ -16,9 +16,30 @@ def index():
     user_id = session.get("user_id")
     if user_id:
         user = UserModel.query.get(user_id)
-        return render_template("index.html", user=user)
+        # Get all categories in a user
+        categories = CategoryModel.query.filter_by(user_id=user_id).all()
+        # get the name of the category
+        default = False
+        for category in categories:
+            if category.name == 'Default':
+                default = True
+                break
+        if not default:
+            default_category = CategoryModel(name='Default', user_id=user_id, color='blue', create_time=datetime.now())
+            db.session.add(default_category)
+            db.session.commit()
+        return render_template("index.html", user=user, categories=categories)
     else:
         return redirect(url_for("views.login"))
+
+
+@bp.route("/delete_category", methods=['POST'])
+def delete_category():
+    category_id = request.form.get("category_id")
+    category = CategoryModel.query.get(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    return jsonify({'code': 200, 'message': 'Success'})
 
 
 @bp.route("/register", methods=['GET', 'POST'])
