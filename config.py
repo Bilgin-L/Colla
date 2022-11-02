@@ -1,1 +1,16 @@
+# 连接sqlite3数据库
+SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite3'
+SQLALCHEMY_TRACK_MODIFICATIONS = True
 
+# Key information
+SECRET_KEY = "CGBHGCYTGYIHUONHGVTGYHUBHJGV"
+
+# 邮箱配置
+MAIL_SERVER = "smtp.qq.com"
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_DEBUG = True
+MAIL_USERNAME = "2964992240@qq.com"
+MAIL_PASSWORD = "lvnbpinsuqcvdgcb"
+MAIL_DEFAULT_SENDER = "2964992240@qq.com"

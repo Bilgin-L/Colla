@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="{{ url_for('static', filename='jquery/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='script/base.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery/jquery_3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='script/register.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap@5.1.1.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
@@ -18,30 +20,30 @@
     <div class="login-container">
     <div class="login-container-decoration"></div>
     <p class="login-title">Register</p>
-    <form>
+    <form method="POST" action="{{ url_for('views.register') }}">
+        <div class="mb-3 mt-3">
+            <label for="username" class="form-label">Username:</label>
+            <input class="form-control add-input" id="username" placeholder="Enter username" name="username">
+        </div>
         <div class="mb-3 mt-3">
             <label for="e_mail" class="form-label">E-mail:</label>
-            <input class="form-control add-input" id="e_mail" placeholder="Enter e-mail" name="email">
+            <input type="email" class="form-control add-input" id="e_mail" placeholder="Enter e-mail" name="email">
         </div>
         <div class="mb-3">
             <label for="captcha">Captcha</label>
             <div class="input-group add-input">
                 <input type="text" class="form-control" name="captcha" id="captcha" placeholder="Code">
-                <button class="btn btn-outline-secondary input-group-text captcha-btn">
+                <button id="captcha-btn" class="btn btn-outline-secondary input-group-text captcha-btn" type="button">
                     Send
                 </button>
             </div>
         </div>
-        <div class="mb-3 mt-3">
-            <label for="email" class="form-label">Username:</label>
-            <input class="form-control add-input" id="email" placeholder="Enter username" name="username">
-        </div>
         <div class="mb-3">
-            <label for="pwd" class="form-label">Password:</label>
-            <input type="password" class="form-control add-input" id="pwd" placeholder="Enter password" name="pswd">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" class="form-control add-input" id="password" placeholder="Enter password" name="password">
         </div>
         <button type="submit" class="login-btn mail-notifier-check">Submit</button>
-        <p class="login-reg">If you have an account, <a href="base.html" class="login-reg-link">Log in!</a></p>
+        <p class="login-reg">If you have an account, <a href="{{ url_for("views.login") }}" class="login-reg-link">Log in!</a></p>
     </form>
 </div>
 </div>

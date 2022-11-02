@@ -1,4 +1,12 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session, g
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, g, jsonify
+from models import EmailCaptchaModel, UserModel
+from .forms import RegisterForm, LoginForm
+from werkzeug.security import generate_password_hash, check_password_hash
+from extensions import mail, db
+from flask_mail import Message
+import string
+import random
+from datetime import datetime
 
 bp = Blueprint("views", __name__, url_prefix="/")
 
@@ -7,10 +15,82 @@ bp = Blueprint("views", __name__, url_prefix="/")
 def index():
     return render_template("index.html")
 
-@bp.route("/login")
-def login():
-    return render_template("login.html")
 
-@bp.route("/register")
+@bp.route("/register", methods=['GET', 'POST'])
 def register():
-    return render_template("register.html")
+    if request.method == 'GET':
+        return render_template("register.html")
+    else:
+        form = RegisterForm(request.form)
+        if form.validate():
+            email = form.email.data
+            username = form.username.data
+            password = form.password.data
+
+            # encrypt
+            hash_password = generate_password_hash(password)
+            user = UserModel(email=email, username=username, password=hash_password)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("views.login"))
+        else:
+            return redirect(url_for("views.register"))
+
+
+@bp.route("/captcha", methods=['POST'])
+def get_captcha():
+    # GET请求
+    email = request.form.get("email")
+    name = request.form.get("username")
+    if name == "":
+        name = "user"
+    # 生成一个验证码
+    letters = string.digits
+    captcha = "".join(random.sample(letters, 4))
+    if email:
+        message = Message(
+            subject="[Colla] - your register code",
+            recipients=[email],
+            body=f"Hi, {name} ! \n\n"
+                 f"You can enter this code to register into Colla: \n\n"
+                 f"{captcha} \n\n"
+                 f"If you weren't trying to register in, let me know."
+        )
+        mail.send(message)
+        captcha_model = EmailCaptchaModel.query.filter_by(email=email).first()
+        if captcha_model:
+            captcha_model.captcha = captcha
+            captcha_model.creat_time = datetime.now()
+            db.session.commit()
+        else:
+            captcha_model = EmailCaptchaModel(email=email, captcha=captcha)
+            db.session.add(captcha_model)
+            db.session.commit()
+        # code:200说明是一个成功的正常的请求
+        return jsonify({"code": 200})
+    else:
+        # code:400 客户端错误
+        return jsonify({"code": 400, "message": "Please deliver your e-mail first! "})
+
+
+@bp.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        form = LoginForm(request.form)
+        if form.validate():
+            email = form.email.data
+            password = form.password.data
+            user = UserModel.query.filter_by(email=email).first()
+            if user and check_password_hash(user.password, password):
+                rememverme = request.form.getlist("remember")
+                if "remember" in rememverme:
+                    session['user_id'] = user.id
+                return redirect("/")
+            else:
+                flash("Password or email is wrong! ")
+                return redirect(url_for("views.login"))
+        else:
+            flash("The format of email or password is wrong! ")
+            return redirect(url_for("views.login"))
