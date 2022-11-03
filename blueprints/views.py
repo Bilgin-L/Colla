@@ -31,20 +31,21 @@ def index():
             default_category = CategoryModel(name='Default', user_id=user_id, color='blue', create_time=datetime.now())
             db.session.add(default_category)
             db.session.commit()
+            return redirect(url_for('views.index'))
 
         # Add a new category
         if request.method == 'POST':
             # Using the form to validate the data
-            form = AddCategoryForm(request.form)
-            if form.validate():
-                name = form.module_name.data
-                color = form.module_color.data
+            form1 = AddCategoryForm(request.form)
+            if form1.validate():
+                name = form1.module_name.data
+                color = form1.module_color.data
                 category = CategoryModel(name=name, user_id=user_id, color=color, create_time=datetime.now())
                 db.session.add(category)
                 db.session.commit()
                 return redirect(url_for('views.index'))
             else:
-                error = form.errors
+                error = form1.errors
                 flash(error['module_name'][0])
                 return redirect(url_for('views.index'))
         return render_template("index.html", user=user, categories=categories)
@@ -59,6 +60,25 @@ def delete_category():
     db.session.delete(category)
     db.session.commit()
     return jsonify({'code': 200, 'message': 'Success'})
+
+
+@bp.route("/edit_category", methods=['POST'])
+def edit_category():
+    form = AddCategoryForm(request.form)
+    if form.validate():
+        name = form.module_name.data
+        color = form.module_color.data
+        category_id = request.form.get("category_id")
+        category = CategoryModel.query.get(category_id)
+        category.name = name
+        category.color = color
+        db.session.commit()
+        return redirect(url_for('views.index'))
+    else:
+        error = form.errors
+        flash(error['module_name'][0])
+        return redirect(url_for('views.index'))
+
 
 
 @bp.route("/register", methods=['GET', 'POST'])

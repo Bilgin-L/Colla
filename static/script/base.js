@@ -1,12 +1,5 @@
 window.onload = function () {
     displayWindowSize();
-    var edit_button_list = $(".edit-btn-list");
-    for (var i = 0; i < edit_button_list.length; i++) {
-        edit_button_list[i].addEventListener("click", function (event) {
-            event.stopPropagation();
-            $('#category').modal('show');
-        })
-    }
     closeAlert();
 }
 
