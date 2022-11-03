@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session, g, jsonify
 from models import EmailCaptchaModel, UserModel, CategoryModel
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, AddCategoryForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import mail, db
 from flask_mail import Message
@@ -11,23 +11,42 @@ from datetime import datetime
 bp = Blueprint("views", __name__, url_prefix="/")
 
 
-@bp.route("/")
+@bp.route("/", methods=['GET', 'POST'])
 def index():
     user_id = session.get("user_id")
     if user_id:
+        # Get the user information
         user = UserModel.query.get(user_id)
         # Get all categories in a user
         categories = CategoryModel.query.filter_by(user_id=user_id).all()
         # get the name of the category
         default = False
+        # detect if the user has a default category
         for category in categories:
             if category.name == 'Default':
                 default = True
                 break
+        # if the user doesn't have a default category, create one
         if not default:
             default_category = CategoryModel(name='Default', user_id=user_id, color='blue', create_time=datetime.now())
             db.session.add(default_category)
             db.session.commit()
+
+        # Add a new category
+        if request.method == 'POST':
+            # Using the form to validate the data
+            form = AddCategoryForm(request.form)
+            if form.validate():
+                name = form.module_name.data
+                color = form.module_color.data
+                category = CategoryModel(name=name, user_id=user_id, color=color, create_time=datetime.now())
+                db.session.add(category)
+                db.session.commit()
+                return redirect(url_for('views.index'))
+            else:
+                error = form.errors
+                flash(error['module_name'][0])
+                return redirect(url_for('views.index'))
         return render_template("index.html", user=user, categories=categories)
     else:
         return redirect(url_for("views.login"))

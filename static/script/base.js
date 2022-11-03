@@ -7,6 +7,7 @@ window.onload = function () {
             $('#category').modal('show');
         })
     }
+    closeAlert();
 }
 
 window.addEventListener("resize", displayWindowSize);
@@ -67,4 +68,11 @@ function deleteCategory(obj, id){
             "category_id": id
         }
     })
+}
+
+function closeAlert(){
+    // after 5 seconds, the alert will be closed automatically with a fade out effect
+    setTimeout(function (){
+        $(".alert").fadeOut();
+    } , 5000)
 }

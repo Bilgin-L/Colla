@@ -5,6 +5,13 @@
     align-content: center!important;
 }
 
+.alert-colla{
+    position: absolute;
+    z-index: 100;
+    right: 20px;
+    bottom: 10px;
+}
+
 .navbar-brand{
     font-family: "Yellowtail", serif;
     font-size: 28px;

@@ -1,6 +1,6 @@
 import wtforms
 from wtforms.validators import length, email, EqualTo, InputRequired
-from models import EmailCaptchaModel, UserModel
+from models import EmailCaptchaModel, UserModel, CategoryModel
 
 
 class RegisterForm(wtforms.Form):
@@ -28,3 +28,14 @@ class RegisterForm(wtforms.Form):
 class LoginForm(wtforms.Form):
     email = wtforms.StringField(validators=[email()])
     password = wtforms.StringField(validators=[length(min=3, max=20)])
+
+
+class AddCategoryForm(wtforms.Form):
+    module_name = wtforms.StringField(validators=[length(min=1, max=10)])
+    module_color = wtforms.StringField(validators=[length(min=1, max=20)])
+
+    def validate_module_name(self, field):
+        module_name = field.data
+        module_model = CategoryModel.query.filter_by(name=module_name).first()
+        if module_model:
+            raise wtforms.ValidationError("This category has been added! ")
