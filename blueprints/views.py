@@ -123,3 +123,10 @@ def login():
         else:
             flash("The format of email or password is wrong! ")
             return redirect(url_for("views.login"))
+
+
+@bp.route("/logout", methods=['GET'])
+def logout():
+    # 清楚session当中所有的数据
+    session.clear()
+    return redirect(url_for('views.login'))
