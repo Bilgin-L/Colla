@@ -57,25 +57,58 @@ function rotate() {
     }
 }
 
-function deleteCategory(obj, id){
+function deleteCategory(obj, id) {
     obj.parentNode.parentNode.removeChild(obj.parentNode);
     $.ajax({
-        url: "/delete_category",
-        method: "POST",
-        data: {
-            "category_id": id
-        },
-        success: function () {
-            console.log("success");
-            location.reload();
+            url: "/delete_category",
+            method: "POST",
+            data: {
+                "category_id": id
+            }
         }
-    }
-)
+    )
 }
 
-function closeAlert(){
+function closeAlert() {
     // after 5 seconds, the alert will be closed automatically with a fade out effect
-    setTimeout(function (){
+    setTimeout(function () {
         $(".alert").fadeOut();
-    } , 5000)
+    }, 5000)
+}
+
+function timeFormat(time) {
+    // convert the date format from '2022-11-03 00:00:00' to '2022-11-03T00:00'
+    let date = new Date(time);
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let hour = date.getHours();
+    let minute = date.getMinutes();
+    let second = date.getSeconds();
+    if (month < 10) {
+        month = "0" + month;
+    } else {
+        month = month.toString();
+    }
+    if (day < 10) {
+        day = "0" + day;
+    } else {
+        day = day.toString();
+    }
+    if (hour < 10) {
+        hour = "0" + hour;
+    } else {
+        hour = hour.toString();
+    }
+    if (minute < 10) {
+        minute = "0" + minute;
+    } else {
+        minute = minute.toString();
+    }
+    if (second < 10) {
+        second = "0" + second;
+    } else {
+        second = second.toString();
+    }
+    return year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second;
 }

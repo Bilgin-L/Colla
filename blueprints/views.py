@@ -115,6 +115,7 @@ def index():
             # get the day of the due date
             day = todo.due_date.day
             data.append(day)
+            data.append(todo.category_id)
             todos_list.append(data)
             data = []
         # print(todos_list)
@@ -221,6 +222,52 @@ def completed():
     db.session.commit()
     # code:200说明是一个成功的正常的请求
     return jsonify({"code": 200})
+
+
+@bp.route("/trash_todo", methods=['POST'])
+@login_required
+def trash_todo():
+    todo_id = request.form.get("id")
+    todo = TodoModel.query.get(todo_id)
+    if todo.trash == 0:
+        todo.trash = 1
+    else:
+        todo.trash = 0
+    db.session.commit()
+    return jsonify({"code": 200})
+
+
+@bp.route("/edit_todo", methods=['POST'])
+@login_required
+def edit_todo():
+    form = AddTodoForm(request.form)
+    if form.validate():
+        todo_id = request.form.get("todo_id")
+        todo = TodoModel.query.get(todo_id)
+        todo.module_code = form.module_code.data
+        todo.module_name = form.module_name_input.data
+        todo.assessment_name = form.assessment_title.data
+        todo.description = form.description.data
+        todo.category_id = request.form.get("category")
+        todo.due_date = request.form.get("due_date")
+        todo.important = request.form.get("important")
+        todo.email_inform = request.form.get("mail_notifier")
+        if todo.email_inform == 'mail_notifier':
+            todo.email_inform = 1
+        else:
+            todo.email_inform = 0
+        if todo.important == 'important':
+            todo.important = 1
+        else:
+            todo.important = 0
+        # convert the date format from '2022-11-03T00:00' to '2022-11-03 00:00:00'
+        todo.due_date = datetime.strptime(todo.due_date, '%Y-%m-%dT%H:%M')
+        db.session.commit()
+        flash("Success: Edit successfully!")
+        return redirect(url_for('views.index'))
+    else:
+        flash("Failed: " + "You have to fill in the blanks except 'description' !")
+        return redirect(url_for('views.index'))
 
 
 @bp.route("/register", methods=['GET', 'POST'])

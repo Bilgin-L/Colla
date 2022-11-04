@@ -149,6 +149,110 @@
 </div>
 {#end#}
 
+{#edit task canvas#}
+{% for todo in todos_list %}
+    <div class="modal fade" id="editTask-{{ todo[0] }}">
+        <div class="modal-dialog modal-lg" id="add-container">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Task</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- 模态框内容 -->
+                <form action="{{ url_for("views.edit_todo") }}" method="POST">
+                    <div class="modal-body">
+                        <div class="row modal-body-row">
+                            <div class="col">
+                                <label for="module-code" class="form-label add-information">Module Code:</label>
+                                <input class="form-control add-input" id="module-code"
+                                       name="module_code" value="{{ todo[1] }}">
+                            </div>
+                            <select id="category-id" name="todo_id" style="height: 0; width:0; visibility: hidden">
+                                    <option value="{{ todo[0] }}" selected="selected"></option>
+                            </select>
+                            <div class="col">
+                                <label for="module-name-input" class="form-label add-information">Module Name:</label>
+                                <input class="form-control add-input" value="{{ todo[2] }}" id="module-name-input"
+                                       name="module_name_input">
+                            </div>
+                        </div>
+                        <div class="row modal-body-row">
+                            <div class="col">
+                                <label for="assessment_title" class="form-label add-information">Assessment
+                                    Title:</label>
+                                <input class="form-control add-input" value="{{ todo[3] }}" id="assessment_title"
+                                       name="assessment_title">
+                            </div>
+                        </div>
+                        <div class="row modal-body-row">
+                            <div class="col">
+                                <label for="category" class="form-label add-information">Category:</label>
+                                <select class="form-select add-input" id="category" name="category">
+                                    {% for category in categories %}
+                                        {% if category.id == todo[16] %}
+                                            <option value="{{ category.id }}" selected="selected">{{ category.name }}</option>
+                                        {% else %}
+                                            <option value="{{ category.id }}">{{ category.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="due_date" class="form-label add-information">Due Date:</label>
+                                <input class="form-control add-input" type="datetime-local" id="due_date_{{ todo[0] }}"
+                                       name="due_date">
+                            </div>
+                            <script>
+                                formatTime = timeFormat("{{ todo[4] }}");
+                                document.getElementById("due_date_{{ todo[0] }}").value = formatTime;
+                            </script>
+                        </div>
+                        <div class="row modal-body-row">
+                            <div class="col">
+                                <label for="description" class="form-label add-information">Description:</label>
+                                <textarea class="form-control add-input" rows="3" id="description"
+                                          name="description">{{ todo[5] }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <div>
+                            {% if todo[8] == "Turn on" %}
+                                <input class="form-check-input mail-notifier-check" type="checkbox" id="check1"
+                                       name="mail_notifier"
+                                       value="mail_notifier" checked="checked">
+                            {% else %}
+                                <input class="form-check-input mail-notifier-check" type="checkbox" id="check1"
+                                       name="mail_notifier"
+                                       value="mail_notifier">
+                            {% endif %}
+                            <label class="form-check-label">Mail Notifier</label>
+
+                            {% if todo[11] == "Important"%}
+                                <input class="form-check-input mail-notifier-check" type="checkbox" id="check1"
+                                       name="important"
+                                       value="important" style="margin-left: 10px" checked="checked">
+                            {% else %}
+                                <input class="form-check-input mail-notifier-check" type="checkbox" id="check1"
+                                       name="important"
+                                       value="important" style="margin-left: 10px">
+                            {% endif %}
+                            <label class="form-check-label">Important</label>
+
+                        </div>
+                        <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{#end#}
+
 {#edit category canvas#}
 {% for category in categories %}
     <div class="modal fade" id="category-edit-{{ category.id }}">

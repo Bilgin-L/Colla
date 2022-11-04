@@ -1,7 +1,8 @@
 function timeCount(due_date, id) {
-    function addZero(i){
+    function addZero(i) {
         return i < 10 ? '0' + i : i;
     }
+
     let countDownDate = document.querySelector("#countDown-" + id);
     let timer = null;
     const startTime = new Date().getTime();
@@ -23,17 +24,36 @@ function timeCount(due_date, id) {
     }
 }
 
-function completed(id){
+function completed(id) {
     $.ajax({
         url: "/completed",
         method: "POST",
         data: {
             "id": id
         },
-        success: function (res){
-            if (res['code'] === 200){
+        success: function (res) {
+            if (res['code'] === 200) {
                 window.location.reload();
-            }else {
+            } else {
+                alert(res['message']);
+            }
+        }
+    })
+}
+
+function trashTodo(obj, id) {
+    // delete the parent's parent element of the obj
+    obj.parentNode.parentNode.remove();
+    $.ajax({
+        url: "/trash_todo",
+        method: "POST",
+        data: {
+            "id": id
+        },
+        success: function (res) {
+            if (res['code'] === 200) {
+                window.location.reload();
+            } else {
                 alert(res['message']);
             }
         }
