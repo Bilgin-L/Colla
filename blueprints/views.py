@@ -7,12 +7,13 @@ from flask_mail import Message
 import string
 import random
 from datetime import datetime
-from decoration import login_required
+from decoration import login_required, check_category
 
 bp = Blueprint("views", __name__, url_prefix="/")
 
 
 @bp.route("/", methods=['GET', 'POST'])
+@check_category
 def index():
     user_id = session.get("user_id")
     if user_id:
