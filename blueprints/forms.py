@@ -39,3 +39,10 @@ class AddCategoryForm(wtforms.Form):
         module_model = CategoryModel.query.filter_by(name=module_name).first()
         if module_model:
             raise wtforms.ValidationError("This category has been added! ")
+
+
+class AddTodoForm(wtforms.Form):
+    module_code = wtforms.StringField(validators=[length(min=1, max=10)])
+    module_name_input = wtforms.StringField(validators=[length(min=1, max=50)])
+    assessment_title = wtforms.StringField(validators=[length(min=1, max=50)])
+    description = wtforms.StringField(validators=[length(min=0, max=500)])

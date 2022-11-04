@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session, g, jsonify
-from models import EmailCaptchaModel, UserModel, CategoryModel
-from .forms import RegisterForm, LoginForm, AddCategoryForm
+from models import EmailCaptchaModel, UserModel, CategoryModel, TodoModel
+from .forms import RegisterForm, LoginForm, AddCategoryForm, AddTodoForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import mail, db
 from flask_mail import Message
 import string
 import random
 from datetime import datetime
+from decoration import login_required
 
 bp = Blueprint("views", __name__, url_prefix="/")
 
@@ -43,17 +44,105 @@ def index():
                 category = CategoryModel(name=name, user_id=user_id, color=color, create_time=datetime.now())
                 db.session.add(category)
                 db.session.commit()
+                flash("Success: Add a new category successfully!")
                 return redirect(url_for('views.index'))
             else:
                 error = form1.errors
-                flash(error['module_name'][0])
+                flash("Failed: " + error['module_name'][0])
                 return redirect(url_for('views.index'))
-        return render_template("index.html", user=user, categories=categories)
+
+        # Get all todos which 'trash' == 0 in a user, and sort them by 'status' and 'due_date'
+        todos = TodoModel.query.filter_by(user_id=user_id, trash=0).order_by(TodoModel.status,
+                                                                             TodoModel.due_date).all()
+        # Using user id and category id to get the category name
+        for todo in todos:
+            category = CategoryModel.query.get(todo.category_id)
+            todo.category_name = category.name
+            todo.category_color = category.color
+
+        todos_list = []
+        data = []
+        # Add all data in 'todo' in todos to the list
+        for todo in todos:
+            data.append(todo.id)
+            data.append(todo.module_code)
+            data.append(todo.module_name)
+            data.append(todo.assessment_name)
+            data.append(todo.due_date)
+            data.append(todo.description)
+            data.append(todo.status)
+            data.append(todo.create_time)
+            if todo.email_inform == 1:
+                data.append("Turn on")
+            else:
+                data.append("Turn off")
+            data.append(todo.status_email)
+            data.append(todo.status_notification)
+            if todo.important == 1:
+                data.append("Important")
+            else:
+                data.append("Normal")
+            data.append(todo.trash)
+            data.append(todo.category_name)
+
+
+            # get the month of the due date
+            month = todo.due_date.month
+            if month == 1:
+                data.append("Jan")
+            elif month == 2:
+                data.append("Feb")
+            elif month == 3:
+                data.append("Mar")
+            elif month == 4:
+                data.append("Apr")
+            elif month == 5:
+                data.append("May")
+            elif month == 6:
+                data.append("Jun")
+            elif month == 7:
+                data.append("Jul")
+            elif month == 8:
+                data.append("Aug")
+            elif month == 9:
+                data.append("Sep")
+            elif month == 10:
+                data.append("Oct")
+            elif month == 11:
+                data.append("Nov")
+            elif month == 12:
+                data.append("Dec")
+            # get the day of the due date
+            day = todo.due_date.day
+            data.append(day)
+            todos_list.append(data)
+            data = []
+        # print(todos_list)
+
+        # ---------------------------------------------------
+        # The code below is used to compute the progress bar
+        # the sum of all todos
+        todo_sum = len(todos)
+        # the sum of all todos that are completed
+        todo_completed = 0
+        for todo in todos:
+            if todo.status:
+                todo_completed += 1
+        # the rate of completed todos
+        if todo_sum == 0:
+            todo_rate = 0
+        else:
+            todo_rate = todo_completed / todo_sum * 100
+        # ----------------------------------------------------
+
+        return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_list,
+                               todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate)
     else:
         return redirect(url_for("views.login"))
 
 
 @bp.route("/delete_category", methods=['POST'])
+@login_required
 def delete_category():
     category_id = request.form.get("category_id")
     category = CategoryModel.query.get(category_id)
@@ -63,6 +152,7 @@ def delete_category():
 
 
 @bp.route("/edit_category", methods=['POST'])
+@login_required
 def edit_category():
     form = AddCategoryForm(request.form)
     if form.validate():
@@ -73,12 +163,64 @@ def edit_category():
         category.name = name
         category.color = color
         db.session.commit()
+        flash("Success: Edit successfully!")
         return redirect(url_for('views.index'))
     else:
         error = form.errors
-        flash(error['module_name'][0])
+        flash("Failed: " + error['module_name'][0])
         return redirect(url_for('views.index'))
 
+
+@bp.route("/add_todo", methods=['POST'])
+@login_required
+def add_todo():
+    form = AddTodoForm(request.form)
+    if form.validate():
+        user_id = session.get("user_id")
+        module_code = form.module_code.data
+        module_name = form.module_name_input.data
+        assessment_title = form.assessment_title.data
+        description = form.description.data
+        category_id = request.form.get("category")
+        due_date = request.form.get("due_date")
+        important = request.form.get("important")
+        mail_notifier = request.form.get("mail_notifier")
+        if mail_notifier == 'mail_notifier':
+            mail_notifier = 1
+        else:
+            mail_notifier = 0
+        if important == 'important':
+            important = 1
+        else:
+            important = 0
+        # convert the date format from '2022-11-03T00:00' to '2022-11-03 00:00:00'
+        due_date = datetime.strptime(due_date, '%Y-%m-%dT%H:%M')
+        todo = TodoModel(module_code=module_code, module_name=module_name, assessment_name=assessment_title,
+                         description=description, category_id=category_id, due_date=due_date, important=important,
+                         email_inform=mail_notifier, user_id=user_id, create_time=datetime.now(), status=0, trash=0,
+                         status_email=0, status_notification=0)
+        db.session.add(todo)
+        db.session.commit()
+        flash("Success: Add a new todo successfully!")
+        return redirect(url_for('views.index'))
+    else:
+        # flash("Failed: " + error['module_code'][0])
+        flash("Failed: " + "You have to fill in the blanks except 'description' !")
+        return redirect(url_for('views.index'))
+
+
+@bp.route("/completed", methods=['POST', 'GET'])
+@login_required
+def completed():
+    todo_id = request.form.get("id")
+    todo = TodoModel.query.get(todo_id)
+    if todo.status == 0:
+        todo.status = 1
+    else:
+        todo.status = 0
+    db.session.commit()
+    # code:200说明是一个成功的正常的请求
+    return jsonify({"code": 200})
 
 
 @bp.route("/register", methods=['GET', 'POST'])
@@ -99,6 +241,7 @@ def register():
             db.session.commit()
             return redirect(url_for("views.login"))
         else:
+            flash("Failed: The information you entered is not valid!")
             return redirect(url_for("views.register"))
 
 

@@ -14,11 +14,14 @@ function displayWindowSize() {
     container.style.height = "calc(100vh - 485px)"
     if (document.body.clientWidth < 750) {
         side.style.width = "0px";
+        // set the box shadow
+        side.style.boxShadow = "0px 20px 40px 0px rgb(0 0 0 / 40%)";
         container2.style.width = "100vw";
         side.style.zIndex = "100";
         center.style.width = "90vw";
         add_container.style.width = "96vw";
     } else {
+        side.style.boxShadow = "none";
         side.style.width = "255px";
         center.style.width = "calc(100vw - 500px)";
         container2.style.width = "calc(100vw - 255px)";
@@ -44,10 +47,12 @@ function side() {
 }
 
 function rotate() {
+    var container = document.getElementsByClassName("side-list3")[0];
     var id = document.getElementById("side-title-btn2");
     if (id.style.transform === "rotate(0deg)") {
         id.style.transform = "rotate(90deg)";
     } else {
+        container.style.height = "calc(100vh - 485px) !important";
         id.style.transform = "rotate(0deg)";
     }
 }
@@ -59,8 +64,13 @@ function deleteCategory(obj, id){
         method: "POST",
         data: {
             "category_id": id
+        },
+        success: function () {
+            console.log("success");
+            location.reload();
         }
-    })
+    }
+)
 }
 
 function closeAlert(){

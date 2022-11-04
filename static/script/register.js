@@ -24,9 +24,9 @@ function bindCaptchaBtnClick(){
                     var countDown = 60;
                     var timer = setInterval(function (){
                         if(countDown > 0){
-                            $this.text(countDown+"秒后重新发送")
+                            $this.text(countDown+" s")
                         }else {
-                            $this.text("获取验证码");
+                            $this.text("Send");
                             // 重新绑定点击事件
                             bindCaptchaBtnClick();
                             // 如果不需要倒计时了，那么就需要记得清除，否则会一直执行下去
@@ -34,7 +34,7 @@ function bindCaptchaBtnClick(){
                         }
                         countDown -= 1;
                     }, 1000)
-                    alert("验证码发送成功！");
+                    alert("Captcha has been sent to your e-mail!");
                 }else {
                     alert(res['message']);
                 }

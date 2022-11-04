@@ -21,12 +21,12 @@
         <form action="{{ url_for("views.login") }}" method="POST">
             <div class="mb-3 mt-3">
                 <label for="email" class="form-label">E-mail:</label>
-                <input class="form-control add-input" id="email" placeholder="Enter email" name="email">
+                <input class="form-control add-input" id="email" placeholder="Enter email" name="email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password:</label>
                 <input type="password" class="form-control add-input" id="password" placeholder="Enter password"
-                       name="password">
+                       name="password" required>
             </div>
             <div class="form-check mb-3">
                 <label class="form-check-label">

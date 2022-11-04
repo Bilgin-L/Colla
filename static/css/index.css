@@ -132,6 +132,8 @@
 }
 
 .task-name{
+    display: inline-block;
+    width: calc(100% - 46px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow:ellipsis;
@@ -253,3 +255,7 @@ p{
     font-weight: bold;
 }
 
+.items-container{
+    height: calc(100vh - 200px);
+    overflow: scroll;
+}

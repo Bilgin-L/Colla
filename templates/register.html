@@ -23,16 +23,16 @@
     <form method="POST" action="{{ url_for('views.register') }}">
         <div class="mb-3 mt-3">
             <label for="username" class="form-label">Username:</label>
-            <input class="form-control add-input" id="username" placeholder="Enter username" name="username">
+            <input class="form-control add-input" id="username" placeholder="Enter username" name="username" required>
         </div>
         <div class="mb-3 mt-3">
             <label for="e_mail" class="form-label">E-mail:</label>
-            <input type="email" class="form-control add-input" id="e_mail" placeholder="Enter e-mail" name="email">
+            <input type="email" class="form-control add-input" id="e_mail" placeholder="Enter e-mail" name="email" required>
         </div>
         <div class="mb-3">
             <label for="captcha">Captcha</label>
             <div class="input-group add-input">
-                <input type="text" class="form-control" name="captcha" id="captcha" placeholder="Code">
+                <input type="text" class="form-control" name="captcha" id="captcha" placeholder="Code" required>
                 <button id="captcha-btn" class="btn btn-outline-secondary input-group-text captcha-btn" type="button">
                     Send
                 </button>
@@ -40,8 +40,15 @@
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password:</label>
-            <input type="password" class="form-control add-input" id="password" placeholder="Enter password" name="password">
+            <input type="password" class="form-control add-input" id="password" placeholder="Enter password" name="password" required>
         </div>
+            {% for message in get_flashed_messages() %}
+                <div class="form-group">
+                    <div class="text-danger">
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
         <button type="submit" class="login-btn mail-notifier-check">Submit</button>
         <p class="login-reg">If you have an account, <a href="{{ url_for("views.login") }}" class="login-reg-link">Log in!</a></p>
     </form>

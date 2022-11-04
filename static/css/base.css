@@ -85,6 +85,7 @@ button[type=button]:focus {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 0!important;
+    height: calc(100vh - 485px);
 }
 
 .list-items{
@@ -241,6 +242,7 @@ input {
 }
 
 .list-item-link{
+    /*background-color: #0a53be;*/
     position: absolute;
     left: 0;
     width: 65%;
