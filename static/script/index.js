@@ -60,42 +60,39 @@ function trashTodo(obj, id) {
     })
 }
 
-function ALL(){
+function indexAll() {
     $.ajax({
-        url: "/",
+        url: "/filter",
         method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            status: "ALL"
-        }),
+        data: {
+            "filters" : "all"
+        },
         success: function () {
             window.location.reload();
         }
     })
 }
 
-function indexCompleted(){
+function indexCompleted() {
     $.ajax({
-        url: "/",
+        url: "/filter",
         method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            status: "true"
-        }),
+        data: {
+            "filters" : "completed"
+        },
         success: function () {
             window.location.reload();
         }
     })
 }
 
-function indexUncompleted(){
+function indexUnCompleted() {
     $.ajax({
-        url: "/",
+        url: "/filter",
         method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            status: "false"
-        }),
+        data: {
+            "filters" : "uncompleted"
+        },
         success: function () {
             window.location.reload();
         }

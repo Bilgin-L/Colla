@@ -32,9 +32,9 @@
                             Filter
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for("views.index") }}">ALL</a></li>
+                            <li><a class="dropdown-item" onclick="indexAll()">ALL</a></li>
                             <li><a class="dropdown-item" onclick="indexCompleted()">Completed</a></li>
-                            <li><a class="dropdown-item" onclick="indexUncompleted()">Uncompleted</a></li>
+                            <li><a class="dropdown-item" onclick="indexUnCompleted()">Uncompleted</a></li>
                         </ul>
                     </div>
                     <div class="dropdown task-title-button2">

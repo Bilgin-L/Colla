@@ -76,3 +76,17 @@ def progress_bar(todos):
         todo_rate = todo_completed / todo_sum * 100
     # ----------------------------------------------------
     return todo_sum, todo_completed, todo_rate
+
+
+def get_all_todos(todo_model, user_id, filters):
+    print(filters)
+    if filters == "completed":
+        print("11111")
+        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=1).order_by(todo_model.due_date).all()
+    elif filters == "uncompleted":
+        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=0).order_by(todo_model.due_date).all()
+    else:
+        # Get all todos which 'trash' == 0 in a user, and sort them by 'status' and 'due_date'
+        todos = todo_model.query.filter_by(user_id=user_id, trash=0).order_by(todo_model.status,
+                                                                              todo_model.due_date).all()
+    return todos

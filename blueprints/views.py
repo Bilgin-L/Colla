@@ -8,7 +8,7 @@ import string
 import random
 from datetime import datetime
 from decoration import login_required, check_category
-from controller import todos_list, progress_bar
+from controller import todos_list, progress_bar, get_all_todos
 
 bp = Blueprint("views", __name__, url_prefix="/")
 
@@ -18,31 +18,41 @@ bp = Blueprint("views", __name__, url_prefix="/")
 @check_category
 def index():
     user_id = session.get("user_id")
-    if user_id:
-        # Get the user information
-        user = UserModel.query.get(user_id)
-        # Get all categories in a user
-        categories = CategoryModel.query.filter_by(user_id=user_id).all()
+    # Get the user information
+    user = UserModel.query.get(user_id)
+    # Get all categories in a user
+    categories = CategoryModel.query.filter_by(user_id=user_id).all()
 
-        # Get all todos which 'trash' == 0 in a user, and sort them by 'status' and 'due_date'
-        todos = TodoModel.query.filter_by(user_id=user_id, trash=0).order_by(TodoModel.status,
-                                                                                 TodoModel.due_date).all()
-        # Using user id and category id to get the category name
-        for todo in todos:
-            category = CategoryModel.query.get(todo.category_id)
-            todo.category_name = category.name
-            todo.category_color = category.color
+    filters_name = session.get("filter")
+    sort = session.get("sort")
 
-        # function: get the todos list
-        todos_total_list = todos_list(todos)
+    todos = get_all_todos(TodoModel, user_id, filters_name)
 
-        # function: fully fulfill the progress bar
-        todo_sum, todo_completed, todo_rate = progress_bar(todos)
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
 
-        return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                               todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate)
-    else:
-        return redirect(url_for("views.login"))
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+    print(todos_total_list)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate)
+
+
+@bp.route("/filter", methods=["POST"])
+@login_required
+def filters():
+    if request.method == "POST":
+        filters_name = request.form.get("filters")
+        # print("filters_name:", filters_name)
+        session["filter"] = filters_name
+        return redirect(url_for("views.index"))
 
 
 @bp.route("/add_category", methods=['POST'])
@@ -265,6 +275,8 @@ def login():
             user = UserModel.query.filter_by(email=email).first()
             if user and check_password_hash(user.password, password):
                 session['user_id'] = user.id
+                session['filter'] = "all"
+                session['sort'] = "due_date"
                 rememverme = request.form.getlist("remember")
                 if "rememberme" in rememverme:
                     session['remember'] = "true"
