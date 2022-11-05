@@ -8,11 +8,13 @@ import string
 import random
 from datetime import datetime
 from decoration import login_required, check_category
+from controller import todos_list, progress_bar
 
 bp = Blueprint("views", __name__, url_prefix="/")
 
 
 @bp.route("/", methods=['GET', 'POST'])
+@login_required
 @check_category
 def index():
     user_id = session.get("user_id")
@@ -21,126 +23,48 @@ def index():
         user = UserModel.query.get(user_id)
         # Get all categories in a user
         categories = CategoryModel.query.filter_by(user_id=user_id).all()
-        # get the name of the category
-        default = False
-        # detect if the user has a default category
-        for category in categories:
-            if category.name == 'Default':
-                default = True
-                break
-        # if the user doesn't have a default category, create one
-        if not default:
-            default_category = CategoryModel(name='Default', user_id=user_id, color='blue', create_time=datetime.now())
-            db.session.add(default_category)
-            db.session.commit()
-            return redirect(url_for('views.index'))
-
-        # Add a new category
-        if request.method == 'POST':
-            # Using the form to validate the data
-            form1 = AddCategoryForm(request.form)
-            if form1.validate():
-                name = form1.module_name.data
-                color = form1.module_color.data
-                category = CategoryModel(name=name, user_id=user_id, color=color, create_time=datetime.now())
-                db.session.add(category)
-                db.session.commit()
-                flash("Success: Add a new category successfully!")
-                return redirect(url_for('views.index'))
-            else:
-                error = form1.errors
-                flash("Failed: " + error['module_name'][0])
-                return redirect(url_for('views.index'))
 
         # Get all todos which 'trash' == 0 in a user, and sort them by 'status' and 'due_date'
         todos = TodoModel.query.filter_by(user_id=user_id, trash=0).order_by(TodoModel.status,
-                                                                             TodoModel.due_date).all()
+                                                                                 TodoModel.due_date).all()
         # Using user id and category id to get the category name
         for todo in todos:
             category = CategoryModel.query.get(todo.category_id)
             todo.category_name = category.name
             todo.category_color = category.color
 
-        todos_list = []
-        data = []
-        # Add all data in 'todo' in todos to the list
-        for todo in todos:
-            data.append(todo.id)
-            data.append(todo.module_code)
-            data.append(todo.module_name)
-            data.append(todo.assessment_name)
-            data.append(todo.due_date)
-            data.append(todo.description)
-            data.append(todo.status)
-            data.append(todo.create_time)
-            if todo.email_inform == 1:
-                data.append("Turn on")
-            else:
-                data.append("Turn off")
-            data.append(todo.status_email)
-            data.append(todo.status_notification)
-            if todo.important == 1:
-                data.append("Important")
-            else:
-                data.append("Normal")
-            data.append(todo.trash)
-            data.append(todo.category_name)
+        # function: get the todos list
+        todos_total_list = todos_list(todos)
 
+        # function: fully fulfill the progress bar
+        todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
-            # get the month of the due date
-            month = todo.due_date.month
-            if month == 1:
-                data.append("Jan")
-            elif month == 2:
-                data.append("Feb")
-            elif month == 3:
-                data.append("Mar")
-            elif month == 4:
-                data.append("Apr")
-            elif month == 5:
-                data.append("May")
-            elif month == 6:
-                data.append("Jun")
-            elif month == 7:
-                data.append("Jul")
-            elif month == 8:
-                data.append("Aug")
-            elif month == 9:
-                data.append("Sep")
-            elif month == 10:
-                data.append("Oct")
-            elif month == 11:
-                data.append("Nov")
-            elif month == 12:
-                data.append("Dec")
-            # get the day of the due date
-            day = todo.due_date.day
-            data.append(day)
-            data.append(todo.category_id)
-            todos_list.append(data)
-            data = []
-        # print(todos_list)
-
-        # ---------------------------------------------------
-        # The code below is used to compute the progress bar
-        # the sum of all todos
-        todo_sum = len(todos)
-        # the sum of all todos that are completed
-        todo_completed = 0
-        for todo in todos:
-            if todo.status:
-                todo_completed += 1
-        # the rate of completed todos
-        if todo_sum == 0:
-            todo_rate = 0
-        else:
-            todo_rate = todo_completed / todo_sum * 100
-        # ----------------------------------------------------
-
-        return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_list,
+        return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
                                todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate)
     else:
         return redirect(url_for("views.login"))
+
+
+@bp.route("/add_category", methods=['POST'])
+@login_required
+def add_category():
+    # Add a new category
+    if request.method == 'POST':
+        user_id = session.get("user_id")
+        # Using the form to validate the data
+        form1 = AddCategoryForm(request.form)
+        if form1.validate():
+            name = form1.module_name.data
+            color = form1.module_color.data
+            category = CategoryModel(name=name, user_id=user_id, color=color, create_time=datetime.now())
+            db.session.add(category)
+            db.session.commit()
+            flash("Success: Add a new category successfully!")
+            return redirect(url_for('views.index'))
+        else:
+            error = form1.errors
+            flash("Failed: " + error['module_name'][0])
+            return redirect(url_for('views.index'))
 
 
 @bp.route("/delete_category", methods=['POST'])

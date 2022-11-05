@@ -59,3 +59,45 @@ function trashTodo(obj, id) {
         }
     })
 }
+
+function ALL(){
+    $.ajax({
+        url: "/",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            status: "ALL"
+        }),
+        success: function () {
+            window.location.reload();
+        }
+    })
+}
+
+function indexCompleted(){
+    $.ajax({
+        url: "/",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            status: "true"
+        }),
+        success: function () {
+            window.location.reload();
+        }
+    })
+}
+
+function indexUncompleted(){
+    $.ajax({
+        url: "/",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            status: "false"
+        }),
+        success: function () {
+            window.location.reload();
+        }
+    })
+}

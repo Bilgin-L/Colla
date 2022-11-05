@@ -345,3 +345,7 @@ input {
 .modal-footer{
     justify-content: space-between;
 }
+
+.dropdown-item:active{
+    background-color: #FFB11B;
+}
