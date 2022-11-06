@@ -1,3 +1,9 @@
+from flask import session
+from models import UserModel, CategoryModel
+import datetime
+from sqlalchemy import extract
+from datetime import timezone, timedelta
+
 def todos_list(todos):
     todos_total_list = []
     data = []
@@ -78,16 +84,41 @@ def progress_bar(todos):
     return todo_sum, todo_completed, todo_rate
 
 
-def get_all_todos(todo_model, user_id, filters, sort):
-    print(filters)
+def get_all_todos(todo_model, user_id, filters, sort, attribute):
+
+    SHA_TZ = timezone(
+        timedelta(hours=8),
+        name='Asia/Shanghai',
+    )
+
+    today = datetime.datetime.now(SHA_TZ)
+
+    model_year = extract('year', todo_model.due_date)
+    model_month = extract('month', todo_model.due_date)
+    model_day = extract('day', todo_model.due_date)
+
+    if attribute == "index":
+        todos = todo_model.query.filter_by(user_id=user_id, trash=0)
+    elif attribute == "important":
+        todos = todo_model.query.filter_by(important=1)
+    elif attribute == "today":
+        todos = todo_model.query.filter_by(user_id=user_id, trash=0).filter(model_year == today.year,
+                                                                            model_month == today.month,
+                                                                            model_day == today.day)
+    elif attribute == "upcoming":
+        todos = todo_model.query.filter_by(user_id=user_id, trash=0).filter(model_year >= today.year,
+                                                                            model_month >= today.month,
+                                                                            model_day > today.day)
+    elif attribute == "timeout":
+        todos = todo_model.query.filter_by(user_id=user_id, trash=0).filter(todo_model.due_date < today)
+
     if filters == "completed":
-        print("11111")
-        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=1)
+        todos = todos.filter_by(user_id=user_id, trash=0, status=1)
     elif filters == "uncompleted":
-        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=0)
+        todos = todos.filter_by(user_id=user_id, trash=0, status=0)
     else:
         # Get all todos which 'trash' == 0 in a user, and sort them by 'status' and 'due_date'
-        todos = todo_model.query.filter_by(user_id=user_id, trash=0)
+        todos = todos.filter_by(user_id=user_id, trash=0)
 
     if sort == "Duedate":
         todos = todos.order_by(todo_model.status, todo_model.due_date).all()
@@ -99,3 +130,13 @@ def get_all_todos(todo_model, user_id, filters, sort):
         todos = todos.order_by(todo_model.status, todo_model.module_name).all()
     
     return todos
+
+
+def basic_information():
+    user_id = session.get("user_id")
+    # Get the user information
+    user = UserModel.query.get(user_id)
+    # Get all categories in a user
+    categories = CategoryModel.query.filter_by(user_id=user_id).all()
+
+    return user_id, user, categories

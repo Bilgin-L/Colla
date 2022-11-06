@@ -1,0 +1,41 @@
+<div class="center-title-bar">
+    <p class="center-title">{{ pagetitle }}</p>
+    <div class="center-progress">
+        <p class="center-progress-title">{{ completed_sum }} / {{ todo_sum }}</p>
+        <div class="progress" id="progress-bar">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                 style="width:{{ todo_rate }}%"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="task-title-bar">
+    <p class="task-title">Process</p>
+    <div class="task-title-button">
+        <div class="dropdown task-title-button2">
+            <button type="button" class="btn btn-primary dropdown-toggle task-title-button3"
+                    data-bs-toggle="dropdown">
+                Filter
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onclick="indexAll()">ALL</a></li>
+                <li><a class="dropdown-item" onclick="indexCompleted()">Completed</a></li>
+                <li><a class="dropdown-item" onclick="indexUnCompleted()">Uncompleted</a></li>
+            </ul>
+        </div>
+        <div class="dropdown task-title-button2">
+            <button type="button" class="btn btn-primary dropdown-toggle task-title-button3"
+                    data-bs-toggle="dropdown">
+                Sort
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" onclick="indexAssessment()">Assessment name</a></li>
+                <li><a class="dropdown-item" onclick="indexModule()">Module name</a></li>
+                <li><a class="dropdown-item" onclick="indexDuedate()">Due date</a></li>
+                <li><a class="dropdown-item" onclick="indexDateadded()">Date added</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -8,7 +8,7 @@ import string
 import random
 from datetime import datetime
 from decoration import login_required, check_category
-from controller import todos_list, progress_bar, get_all_todos
+from controller import todos_list, progress_bar, get_all_todos, basic_information
 
 bp = Blueprint("views", __name__, url_prefix="/")
 
@@ -17,17 +17,14 @@ bp = Blueprint("views", __name__, url_prefix="/")
 @login_required
 @check_category
 def index():
-    user_id = session.get("user_id")
-    # Get the user information
-    user = UserModel.query.get(user_id)
-    # Get all categories in a user
-    categories = CategoryModel.query.filter_by(user_id=user_id).all()
+
+    user_id, user, categories = basic_information()
 
     filters_name = session.get("filter")
     sort = session.get("sort")
+    attribute = "index"
 
-    todos = get_all_todos(TodoModel, user_id, filters_name, sort)
-
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort, attribute)
     # Using user id and category id to get the category name
     for todo in todos:
         category = CategoryModel.query.get(todo.category_id)
@@ -36,13 +33,185 @@ def index():
 
     # function: get the todos list
     todos_total_list = todos_list(todos)
-    print(todos_total_list)
 
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate)
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Inbox")
+
+
+@bp.route("/important", methods=['GET', 'POST'])
+@login_required
+@check_category
+def important():
+    user_id, user, categories = basic_information()
+
+    filters_name = session.get("filter")
+    sort = session.get("sort")
+
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort, "important")
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
+
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Important")
+
+
+@bp.route("/today", methods=['GET', 'POST'])
+@login_required
+@check_category
+def today():
+    user_id, user, categories = basic_information()
+
+    filters_name = session.get("filter")
+    sort = session.get("sort")
+
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort, "today")
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
+
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Today")
+
+
+@bp.route("/upcoming", methods=['GET', 'POST'])
+@login_required
+@check_category
+def upcoming():
+    user_id, user, categories = basic_information()
+
+    filters_name = session.get("filter")
+    sort = session.get("sort")
+
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort, "upcoming")
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
+
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Upcoming")
+
+
+@bp.route("/timeout", methods=['GET', 'POST'])
+@login_required
+@check_category
+def timeout():
+    user_id, user, categories = basic_information()
+
+    filters_name = session.get("filter")
+    sort = session.get("sort")
+
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort, "timeout")
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
+
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Time Out")
+
+
+@bp.route("/trash", methods=['GET', 'POST'])
+@login_required
+@check_category
+def trash():
+    user_id, user, categories = basic_information()
+
+    todos = TodoModel.query.filter_by(user_id=user_id, trash=1).order_by(TodoModel.id.desc()).all()
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
+
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("trash.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Trash")
+
+
+@bp.route("/recover_todo", methods=['POST'])
+@login_required
+def recover_todo():
+    todo_id = request.form.get("id")
+    todo = TodoModel.query.get(todo_id)
+    todo.trash = 0
+    db.session.commit()
+    return jsonify({"status": "success"})
+
+
+@bp.route("/delete_todo", methods=['POST'])
+@login_required
+def delete_todo():
+    todo_id = request.form.get("id")
+    todo = TodoModel.query.get(todo_id)
+    db.session.delete(todo)
+    db.session.commit()
+    return jsonify({"status": "success"})
+
+
+@bp.route("/category/<int:category_id>", methods=['GET', 'POST'])
+@login_required
+@check_category
+def category(category_id):
+    user_id, user, categories = basic_information()
+
+    filters_name = session.get("filter")
+    sort = session.get("sort")
+
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort, category_id)
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
+
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Category")
 
 
 @bp.route("/filter", methods=["POST"])
