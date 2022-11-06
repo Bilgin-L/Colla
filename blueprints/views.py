@@ -165,7 +165,7 @@ def trash():
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("trash.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Trash")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Trash Box")
 
 
 @bp.route("/recover_todo", methods=['POST'])
