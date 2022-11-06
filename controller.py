@@ -78,15 +78,24 @@ def progress_bar(todos):
     return todo_sum, todo_completed, todo_rate
 
 
-def get_all_todos(todo_model, user_id, filters):
+def get_all_todos(todo_model, user_id, filters, sort):
     print(filters)
     if filters == "completed":
         print("11111")
-        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=1).order_by(todo_model.due_date).all()
+        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=1)
     elif filters == "uncompleted":
-        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=0).order_by(todo_model.due_date).all()
+        todos = todo_model.query.filter_by(user_id=user_id, trash=False, status=0)
     else:
         # Get all todos which 'trash' == 0 in a user, and sort them by 'status' and 'due_date'
-        todos = todo_model.query.filter_by(user_id=user_id, trash=0).order_by(todo_model.status,
-                                                                              todo_model.due_date).all()
+        todos = todo_model.query.filter_by(user_id=user_id, trash=0)
+
+    if sort == "Duedate":
+        todos = todos.order_by(todo_model.status, todo_model.due_date).all()
+    elif sort == "Dateadded":
+        todos = todos.order_by(todo_model.status, todo_model.create_time).all()
+    elif sort == "Assessment":
+        todos = todos.order_by(todo_model.status, todo_model.assessment_name).all()
+    elif sort == "Module":
+        todos = todos.order_by(todo_model.status, todo_model.module_name).all()
+    
     return todos

@@ -98,3 +98,56 @@ function indexUnCompleted() {
         }
     })
 }
+
+function indexAssessment(){
+    $.ajax({
+        url: "/sort",
+        method: "POST",
+        data: {
+            "sort" : "Assessment"
+        },
+        success: function () {
+            window.location.reload();
+        }
+    })
+}
+
+function indexModule(){
+    $.ajax({
+        url: "/sort",
+        method: "POST",
+        data: {
+            "sort" : "Module"
+        },
+        success: function () {
+            window.location.reload();
+        }
+    })
+}
+
+function indexDuedate(){
+    $.ajax({
+        url: "/sort",
+        method: "POST",
+        data: {
+            "sort" : "Duedate"
+        },
+        success: function () {
+            window.location.reload();
+        }
+    })
+}
+
+function indexDateadded(){
+    $.ajax({
+        url: "/sort",
+        method: "POST",
+        data: {
+            "sort" : "Dateadded"
+        },
+        success: function () {
+            window.location.reload();
+        }
+    })
+}
+

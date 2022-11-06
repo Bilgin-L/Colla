@@ -26,7 +26,7 @@ def index():
     filters_name = session.get("filter")
     sort = session.get("sort")
 
-    todos = get_all_todos(TodoModel, user_id, filters_name)
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort)
 
     # Using user id and category id to get the category name
     for todo in todos:
@@ -52,6 +52,16 @@ def filters():
         filters_name = request.form.get("filters")
         # print("filters_name:", filters_name)
         session["filter"] = filters_name
+        return redirect(url_for("views.index"))
+
+
+@bp.route("/sort", methods=["POST"])
+@login_required
+def sort():
+    if request.method == "POST":
+        sort_name = request.form.get("sort")
+        # print("filters_name:", filters_name)
+        session["sort"] = sort_name
         return redirect(url_for("views.index"))
 
 
