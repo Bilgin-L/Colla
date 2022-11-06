@@ -192,12 +192,16 @@ def delete_todo():
 @login_required
 @check_category
 def category(category_id):
+    # get the name of the category
+    category = CategoryModel.query.get(category_id)
+    category_name = category.name
+
     user_id, user, categories = basic_information()
 
     filters_name = session.get("filter")
     sort = session.get("sort")
 
-    todos = get_all_todos(TodoModel, user_id, filters_name, sort, category_id)
+    todos = get_all_todos(TodoModel, user_id, filters_name, sort, "index", category_id)
     # Using user id and category id to get the category name
     for todo in todos:
         category = CategoryModel.query.get(todo.category_id)
@@ -211,7 +215,7 @@ def category(category_id):
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Category")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle=category_name)
 
 
 @bp.route("/filter", methods=["POST"])

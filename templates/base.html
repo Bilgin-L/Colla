@@ -482,14 +482,14 @@
                     {% for category in categories %}
                         {% if category.name == "Default" %}
                             <li class="nav-item nav-items nav-link list-items2">
-                                <a href="{{ category.id }}" class="list-item-link">
+                                <a href="{{ url_for("views.category", category_id=category.id) }}" class="list-item-link">
                                     <div class="circle bg-primary"></div>
                                     Default
                                 </a>
                             </li>
                         {% else %}
                             <li class="nav-item nav-items nav-link list-items2">
-                                <a href="{{ category.id }}" class="list-item-link">
+                                <a href="{{ url_for("views.category", category_id=category.id)}}" class="list-item-link">
                                     {% if category.color == "blue" %}
                                         {% set color = "bg-primary" %}
                                     {% elif category.color == "green" %}

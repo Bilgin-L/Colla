@@ -84,7 +84,7 @@ def progress_bar(todos):
     return todo_sum, todo_completed, todo_rate
 
 
-def get_all_todos(todo_model, user_id, filters, sort, attribute):
+def get_all_todos(todo_model, user_id, filters, sort, attribute, category=None):
 
     SHA_TZ = timezone(
         timedelta(hours=8),
@@ -119,6 +119,9 @@ def get_all_todos(todo_model, user_id, filters, sort, attribute):
     else:
         # Get all todos which 'trash' == 0 in a user, and sort them by 'status' and 'due_date'
         todos = todos.filter_by(user_id=user_id, trash=0)
+
+    if category is not None:
+        todos = todos.filter_by(category_id=category)
 
     if sort == "Duedate":
         todos = todos.order_by(todo_model.status, todo_model.due_date).all()
