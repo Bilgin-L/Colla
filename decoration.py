@@ -1,7 +1,9 @@
-from flask import g, redirect, url_for
+from flask import g, redirect, url_for, flash
 from functools import wraps
 from models import CategoryModel, TodoModel
-from extensions import db
+from extensions import db, mail
+import datetime
+from flask_mail import Message
 
 
 def login_required(func):
@@ -31,6 +33,30 @@ def check_category(func):
         for todo in todos:
             if todo.category is None:
                 todo.category_id = category.id
+                db.session.commit()
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def email_inform(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Traverse all todos of the current user
+        todos = TodoModel.query.filter_by(user_id=g.user.id).all()
+        # If the time of todo is less than 24 hours and 'email_inform' is 1 and 'status_email' is 0, then send an email
+        for todo in todos:
+            if todo.due_date - datetime.datetime.now() < datetime.timedelta(hours=24) and todo.email_inform == 1 and todo.status_email == 0:
+                # Send an email
+                msg = Message(
+                    subject="[Colla] - !! Reminder !!",
+                    recipients=[g.user.email],
+                    body="Hi, " + g.user.username + ":\n\n" +
+                         "You have a todo ' " + todo.assessment_name + " ' which is due in 24 hours.\n\n" +
+                         "Best regards,\n" +
+                         "Colla Team"
+                )
+                mail.send(msg)
+                todo.status_email = 1
                 db.session.commit()
         return func(*args, **kwargs)
     return wrapper

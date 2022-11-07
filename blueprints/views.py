@@ -7,8 +7,8 @@ from flask_mail import Message
 import string
 import random
 from datetime import datetime
-from decoration import login_required, check_category
-from controller import todos_list, progress_bar, get_all_todos, basic_information, notification_list
+from decoration import login_required, check_category, email_inform
+from controller import todos_list, progress_bar, get_all_todos, basic_information, notification_list, check_notification
 from sqlalchemy import or_
 
 bp = Blueprint("views", __name__, url_prefix="/")
@@ -17,6 +17,7 @@ bp = Blueprint("views", __name__, url_prefix="/")
 @bp.route("/", methods=['GET', 'POST'])
 @login_required
 @check_category
+@email_inform
 def index():
 
     user_id, user, categories = basic_information()
@@ -40,6 +41,11 @@ def index():
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
+    notification_trigger, notification_contents = check_notification()
+    if notification_trigger:
+        for content in notification_contents:
+            flash(content)
+
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
                            todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Inbox",
                            notification_list=notificatons_total_list)
@@ -48,6 +54,7 @@ def index():
 @bp.route("/important", methods=['GET', 'POST'])
 @login_required
 @check_category
+@email_inform
 def important():
     user_id, user, categories = basic_information()
 
@@ -78,6 +85,7 @@ def important():
 @bp.route("/today", methods=['GET', 'POST'])
 @login_required
 @check_category
+@email_inform
 def today():
     user_id, user, categories = basic_information()
 
@@ -108,6 +116,7 @@ def today():
 @bp.route("/upcoming", methods=['GET', 'POST'])
 @login_required
 @check_category
+@email_inform
 def upcoming():
     user_id, user, categories = basic_information()
 
@@ -138,6 +147,7 @@ def upcoming():
 @bp.route("/timeout", methods=['GET', 'POST'])
 @login_required
 @check_category
+@email_inform
 def timeout():
     user_id, user, categories = basic_information()
 
@@ -168,6 +178,7 @@ def timeout():
 @bp.route("/trash", methods=['GET', 'POST'])
 @login_required
 @check_category
+@email_inform
 def trash():
     user_id, user, categories = basic_information()
 
@@ -225,6 +236,7 @@ def clear_notification():
 @bp.route("/category/<int:category_id>", methods=['GET', 'POST'])
 @login_required
 @check_category
+@email_inform
 def category(category_id):
     # get the name of the category
     category = CategoryModel.query.get(category_id)
@@ -263,6 +275,7 @@ def category(category_id):
 @bp.route("/search")
 @login_required
 @check_category
+@email_inform
 def search():
     user_id, user, categories = basic_information()
 

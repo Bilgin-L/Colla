@@ -1,8 +1,9 @@
-from flask import session
-from models import UserModel, CategoryModel
+from flask import session, g
+from models import UserModel, CategoryModel, NotificationModel, TodoModel
 import datetime
 from sqlalchemy import extract
 from datetime import timezone, timedelta
+from extensions import db
 
 def todos_list(todos):
     todos_total_list = []
@@ -158,3 +159,25 @@ def basic_information():
     categories = CategoryModel.query.filter_by(user_id=user_id).all()
 
     return user_id, user, categories
+
+
+def check_notification():
+    user_id = session.get("user_id")
+    todos = TodoModel.query.filter_by(user_id=user_id).all()
+    notification_trigger = 0
+    contents_list = []
+    # Traverse all todos of the current user
+    for todo in todos:
+        # If the time of todo is less than 24 hours and the notification is not sent, then send a notification
+        if todo.due_date - datetime.datetime.now() < datetime.timedelta(hours=24) and todo.status_notification == 0:
+            todo.status_notification = 1
+            db.session.commit()
+            # Generate a notification
+            contents = "Your todo '" + todo.assessment_name + "' is due in 24 hours."
+            notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.datetime.now())
+            db.session.add(notification)
+            db.session.commit()
+            contents_list.append(contents)
+            notification_trigger = 1
+
+    return notification_trigger, contents_list
