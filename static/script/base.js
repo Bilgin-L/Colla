@@ -122,3 +122,13 @@ function timeFormat(time) {
     return year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second;
 }
 
+function clearNotification() {
+    $.ajax({
+        url: "/clear_notification",
+        method: "POST",
+        success: function () {
+            // delete all classes called 'notification-table'
+            $(".notification-table").remove();
+        }
+    })
+}

@@ -60,3 +60,14 @@ class TodoModel(db.Model):
     user = db.relationship("UserModel", backref="todos")
     # If you want to get all the todos of a category, you can write it through todos
     category = db.relationship("CategoryModel", backref="todos")
+
+
+class NotificationModel(db.Model):
+    __tablename__ = "notification"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.String(500), nullable=False, unique=False)
+    create_time = db.Column(db.DateTime, default=datetime.now)
+    # User id will be the foreign key
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    # If you want to get all the notifications of a user, you can write it through notifications
+    user = db.relationship("UserModel", backref="notifications")

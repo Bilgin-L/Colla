@@ -65,6 +65,21 @@ def todos_list(todos):
     return todos_total_list
 
 
+def notification_list(notifications):
+    notification_total_list = []
+    data = []
+    # Add all data in 'notification' in notifications to the list
+    for notification in notifications:
+        data.append(notification.id)
+        data.append(notification.content)
+        # get the year, month and day of the notification
+        date = notification.create_time.date()
+        data.append(date)
+        notification_total_list.append(data)
+        data = []
+    return notification_total_list
+
+
 def progress_bar(todos):
     # ---------------------------------------------------
     # The code below is used to compute the progress bar

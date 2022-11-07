@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session, g, jsonify
-from models import EmailCaptchaModel, UserModel, CategoryModel, TodoModel
+from models import EmailCaptchaModel, UserModel, CategoryModel, TodoModel, NotificationModel
 from .forms import RegisterForm, LoginForm, AddCategoryForm, AddTodoForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import mail, db
@@ -8,7 +8,7 @@ import string
 import random
 from datetime import datetime
 from decoration import login_required, check_category
-from controller import todos_list, progress_bar, get_all_todos, basic_information
+from controller import todos_list, progress_bar, get_all_todos, basic_information, notification_list
 from sqlalchemy import or_
 
 bp = Blueprint("views", __name__, url_prefix="/")
@@ -34,12 +34,15 @@ def index():
 
     # function: get the todos list
     todos_total_list = todos_list(todos)
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
 
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Inbox")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Inbox",
+                           notification_list=notificatons_total_list)
 
 
 @bp.route("/important", methods=['GET', 'POST'])
@@ -189,6 +192,16 @@ def delete_todo():
     return jsonify({"status": "success"})
 
 
+@bp.route("/clear_notification", methods=['POST'])
+@login_required
+def clear_notification():
+    user_id = session.get("user_id")
+    # delete all data in the notification table
+    NotificationModel.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+    return jsonify({"status": "success"})
+
+
 @bp.route("/category/<int:category_id>", methods=['GET', 'POST'])
 @login_required
 @check_category
@@ -288,7 +301,12 @@ def add_category():
             category = CategoryModel(name=name, user_id=user_id, color=color, create_time=datetime.now())
             db.session.add(category)
             db.session.commit()
-            flash("Success: Add a new category successfully!")
+            contents = "Add a new category: " + name
+            # save in the NotificationModel
+            notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.now())
+            db.session.add(notification)
+            db.session.commit()
+            flash("Success: Add a new category: " + name)
             return redirect(url_for('views.index'))
         else:
             error = form1.errors
@@ -310,6 +328,7 @@ def delete_category():
 @login_required
 def edit_category():
     form = AddCategoryForm(request.form)
+    user_id = session.get("user_id")
     if form.validate():
         name = form.module_name.data
         color = form.module_color.data
@@ -318,7 +337,12 @@ def edit_category():
         category.name = name
         category.color = color
         db.session.commit()
-        flash("Success: Edit successfully!")
+        contents = "Edit a category: " + name
+        # save in the NotificationModel
+        notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.now())
+        db.session.add(notification)
+        db.session.commit()
+        flash("Success: Edit a category: " + name)
         return redirect(url_for('views.index'))
     else:
         error = form.errors
@@ -356,7 +380,12 @@ def add_todo():
                          status_email=0, status_notification=0)
         db.session.add(todo)
         db.session.commit()
-        flash("Success: Add a new todo successfully!")
+        contents = "Add a new todo: " + assessment_title
+        # save in the NotificationModel
+        notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.now())
+        db.session.add(notification)
+        db.session.commit()
+        flash("Success: Add a new category: " + assessment_title)
         return redirect(url_for('views.index'))
     else:
         # flash("Failed: " + error['module_code'][0])
@@ -417,7 +446,12 @@ def edit_todo():
         # convert the date format from '2022-11-03T00:00' to '2022-11-03 00:00:00'
         todo.due_date = datetime.strptime(todo.due_date, '%Y-%m-%dT%H:%M')
         db.session.commit()
-        flash("Success: Edit successfully!")
+        contents = "Edit a todo: " + todo.assessment_name
+        # save in the NotificationModel
+        notification = NotificationModel(user_id=todo.user_id, content=contents, create_time=datetime.now())
+        db.session.add(notification)
+        db.session.commit()
+        flash("Success: Edit a todo: " + todo.assessment_name)
         return redirect(url_for('views.index'))
     else:
         flash("Failed: " + "You have to fill in the blanks except 'description' !")
