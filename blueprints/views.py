@@ -64,11 +64,15 @@ def important():
     # function: get the todos list
     todos_total_list = todos_list(todos)
 
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
+
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Important")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Important",
+                           notification_list=notificatons_total_list)
 
 
 @bp.route("/today", methods=['GET', 'POST'])
@@ -90,11 +94,15 @@ def today():
     # function: get the todos list
     todos_total_list = todos_list(todos)
 
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
+
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Today")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Today",
+                           notification_list=notificatons_total_list)
 
 
 @bp.route("/upcoming", methods=['GET', 'POST'])
@@ -116,11 +124,15 @@ def upcoming():
     # function: get the todos list
     todos_total_list = todos_list(todos)
 
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
+
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Upcoming")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Upcoming",
+                           notification_list=notificatons_total_list)
 
 
 @bp.route("/timeout", methods=['GET', 'POST'])
@@ -142,11 +154,15 @@ def timeout():
     # function: get the todos list
     todos_total_list = todos_list(todos)
 
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
+
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Timeout")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Timeout",
+                           notification_list=notificatons_total_list)
 
 
 @bp.route("/trash", methods=['GET', 'POST'])
@@ -165,11 +181,15 @@ def trash():
     # function: get the todos list
     todos_total_list = todos_list(todos)
 
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
+
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("trash.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Trash Box")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Trash Box",
+                           notification_list=notificatons_total_list)
 
 
 @bp.route("/recover_todo", methods=['POST'])
@@ -229,12 +249,15 @@ def category(category_id):
     # function: get the todos list
     todos_total_list = todos_list(todos)
 
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
+
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
                            todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle=category_name,
-                           category_id=category_id)
+                           category_id=category_id, notification_list=notificatons_total_list)
 
 
 @bp.route("/search")
@@ -260,11 +283,15 @@ def search():
     # function: get the todos list
     todos_total_list = todos_list(todos)
 
+    notificatons = NotificationModel.query.filter_by(user_id=user_id).all()
+    notificatons_total_list = notification_list(notificatons)
+
     # function: fully fulfill the progress bar
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("search.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Search Result")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate,
+                           pagetitle="Search Result", notification_list=notificatons_total_list)
 
 
 @bp.route("/filter", methods=["POST"])
