@@ -34,7 +34,7 @@
     width: 255px;
     background-color: #FAFAFA;
     height: calc(100vh - 44px);
-    transition: width ease .5s;
+    /*transition: width ease .5s;*/
     padding-top: 30px;
     overflow: hidden;
     flex-direction: column;

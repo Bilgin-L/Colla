@@ -16,7 +16,7 @@ function displayWindowSize() {
         side.style.width = "0px";
         // side.style.visibility = "hidden";
         // set the box shadow
-        side.style.boxShadow = "0px 20px 40px 0px rgb(0 0 0 / 40%)";
+        side.style.boxShadow = "0px 20px 40px 0px rgb(0 0 0 / 30%)";
         container2.style.width = "100vw";
         side.style.zIndex = "100";
         center.style.width = "90vw";
@@ -25,6 +25,7 @@ function displayWindowSize() {
         side.style.visibility = "visible";
         side.style.boxShadow = "none";
         side.style.width = "255px";
+        side.style.transition = "width .5s ease";
         center.style.width = "calc(100vw - 500px)";
         container2.style.width = "calc(100vw - 255px)";
         add_container.style.width = "40%";
@@ -40,6 +41,7 @@ function side() {
         side.style.width = "0px";
         container.style.width = "100vw";
     } else {
+        side.style.transition = "width .5s ease";
         // side.style.visibility = "visible";
         side.style.width = "255px";
         if (document.body.clientWidth >= 750) {
