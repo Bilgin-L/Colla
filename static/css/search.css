@@ -1,0 +1,21 @@
+.center-title-bar-search{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.return-btn{
+    margin-left: 10px;
+    height: 35px;
+    width: 35px;
+    border-radius: 5px;
+    transition: ease .4s;
+    background-color: #eaecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.return-btn:hover{
+    background-color: #e2e3e5;
+}

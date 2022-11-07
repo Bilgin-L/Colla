@@ -34,7 +34,7 @@
     width: 255px;
     background-color: #FAFAFA;
     height: calc(100vh - 44px);
-    transition: ease .5s;
+    transition: width ease .5s;
     padding-top: 30px;
     overflow: hidden;
     flex-direction: column;
@@ -235,6 +235,7 @@ input {
     overflow: hidden;
     color: #2B2B2B!important;
     font-size: 14px!important;
+    margin-bottom: 5px;
 }
 
 .list-items2:hover{

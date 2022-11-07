@@ -9,6 +9,7 @@ import random
 from datetime import datetime
 from decoration import login_required, check_category
 from controller import todos_list, progress_bar, get_all_todos, basic_information
+from sqlalchemy import or_
 
 bp = Blueprint("views", __name__, url_prefix="/")
 
@@ -142,7 +143,7 @@ def timeout():
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Time Out")
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Timeout")
 
 
 @bp.route("/trash", methods=['GET', 'POST'])
@@ -194,6 +195,10 @@ def delete_todo():
 def category(category_id):
     # get the name of the category
     category = CategoryModel.query.get(category_id)
+
+    if category is None:
+        return redirect(url_for("views.index"))
+
     category_name = category.name
 
     user_id, user, categories = basic_information()
@@ -215,7 +220,38 @@ def category(category_id):
     todo_sum, todo_completed, todo_rate = progress_bar(todos)
 
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
-                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle=category_name)
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle=category_name,
+                           category_id=category_id)
+
+
+@bp.route("/search")
+@login_required
+@check_category
+def search():
+    user_id, user, categories = basic_information()
+
+    search = request.args.get("todos")
+
+    todos = TodoModel.query.filter_by(user_id=user_id, trash=0).filter(or_(TodoModel.assessment_name.like("%" + search + "%"),
+                                                              TodoModel.module_name.like("%" + search + "%"),
+                                                              TodoModel.module_code.like("%" + search + "%"),
+                                                              TodoModel.due_date.like("%" + search + "%"),
+                                                              TodoModel.description.like("%" + search + "%"))).all()
+
+    # Using user id and category id to get the category name
+    for todo in todos:
+        category = CategoryModel.query.get(todo.category_id)
+        todo.category_name = category.name
+        todo.category_color = category.color
+
+    # function: get the todos list
+    todos_total_list = todos_list(todos)
+
+    # function: fully fulfill the progress bar
+    todo_sum, todo_completed, todo_rate = progress_bar(todos)
+
+    return render_template("search.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
+                           todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Search Result")
 
 
 @bp.route("/filter", methods=["POST"])
@@ -459,7 +495,7 @@ def login():
             if user and check_password_hash(user.password, password):
                 session['user_id'] = user.id
                 session['filter'] = "all"
-                session['sort'] = "due_date"
+                session['sort'] = "Duedate"
                 rememverme = request.form.getlist("remember")
                 if "rememberme" in rememverme:
                     session['remember'] = "true"

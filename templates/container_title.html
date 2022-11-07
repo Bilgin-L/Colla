@@ -1,5 +1,6 @@
 <div class="center-title-bar">
     <p class="center-title">{{ pagetitle }}</p>
+    {% block search %}{% endblock %}
     <div class="center-progress">
         <p class="center-progress-title">{{ completed_sum }} / {{ todo_sum }}</p>
         <div class="progress" id="progress-bar">
@@ -12,7 +13,7 @@
 <hr>
 
 <div class="task-title-bar">
-    <p class="task-title">Process</p>
+    <p class="task-title">Todos</p>
     <div class="task-title-button">
         <div class="dropdown task-title-button2">
             <button type="button" class="btn btn-primary dropdown-toggle task-title-button3"

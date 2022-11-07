@@ -14,6 +14,7 @@ function displayWindowSize() {
     container.style.height = "calc(100vh - 485px)"
     if (document.body.clientWidth < 750) {
         side.style.width = "0px";
+        // side.style.visibility = "hidden";
         // set the box shadow
         side.style.boxShadow = "0px 20px 40px 0px rgb(0 0 0 / 40%)";
         container2.style.width = "100vw";
@@ -21,11 +22,13 @@ function displayWindowSize() {
         center.style.width = "90vw";
         add_container.style.width = "96vw";
     } else {
+        side.style.visibility = "visible";
         side.style.boxShadow = "none";
         side.style.width = "255px";
         center.style.width = "calc(100vw - 500px)";
         container2.style.width = "calc(100vw - 255px)";
         add_container.style.width = "40%";
+        container2.style.transition = "width .5s ease";
     }
 
 }
@@ -37,6 +40,7 @@ function side() {
         side.style.width = "0px";
         container.style.width = "100vw";
     } else {
+        // side.style.visibility = "visible";
         side.style.width = "255px";
         if (document.body.clientWidth >= 750) {
             container.style.width = "calc(100vw - 255px)";
@@ -64,6 +68,9 @@ function deleteCategory(obj, id) {
             method: "POST",
             data: {
                 "category_id": id
+            },
+            success: function () {
+                window.location.reload();
             }
         }
     )

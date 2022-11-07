@@ -4,7 +4,7 @@
     justify-content: center;
     width: calc(100vw - 255px);
     height: calc(100vh - 44px);
-    transition: width .5s ease;
+    /*transition: width .5s ease;*/
     right: 0;
 }
 
