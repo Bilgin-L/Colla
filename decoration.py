@@ -43,7 +43,7 @@ def email_inform(func):
     def wrapper(*args, **kwargs):
         # Traverse all todos of the current user
         todos = TodoModel.query.filter_by(user_id=g.user.id).all()
-        # If the time of todo is less than 24 hours and 'email_inform' is 1 and 'status_email' is 0, then send an email
+        # If the time of todos is less than 24 hours and 'email_inform' is 1 and 'status_email' is 0, then send an email
         for todo in todos:
             if todo.due_date - datetime.datetime.now() < datetime.timedelta(hours=24) and todo.email_inform == 1 and todo.status_email == 0:
                 # Send an email

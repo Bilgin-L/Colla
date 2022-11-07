@@ -168,7 +168,7 @@ def check_notification():
     contents_list = []
     # Traverse all todos of the current user
     for todo in todos:
-        # If the time of todo is less than 24 hours and the notification is not sent, then send a notification
+        # If the time of todos is less than 24 hours and the notification is not sent, then send a notification
         if todo.due_date - datetime.datetime.now() < datetime.timedelta(hours=24) and todo.status_notification == 0:
             todo.status_notification = 1
             db.session.commit()
