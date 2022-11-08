@@ -7,6 +7,7 @@
     <script src="{{ url_for('static', filename='jquery/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='script/base.js') }}"></script>
     <script src="{{ url_for('static', filename='jquery/jquery_3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='canvas/canvas.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap@5.1.1.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {% block head %}{% endblock %}
@@ -567,23 +568,23 @@
                 <ul class="nav nav-pills flex-column mb-auto">
                     {% for category in categories %}
                         {% if category.name == "Default" %}
-                        {% if pagetitle == "Default" %}
-                            <li class="nav-item nav-items nav-link list-items2 active">
-                                <a href="{{ url_for("views.category", category_id=category.id) }}"
-                                   class="list-item-link">
-                                    <div class="circle bg-primary"></div>
-                                    Default
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="nav-item nav-items nav-link list-items2">
-                                <a href="{{ url_for("views.category", category_id=category.id) }}"
-                                   class="list-item-link">
-                                    <div class="circle bg-primary"></div>
-                                    Default
-                                </a>
-                            </li>
-                        {% endif %}
+                            {% if pagetitle == "Default" %}
+                                <li class="nav-item nav-items nav-link list-items2 active">
+                                    <a href="{{ url_for("views.category", category_id=category.id) }}"
+                                       class="list-item-link">
+                                        <div class="circle bg-primary"></div>
+                                        Default
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item nav-items nav-link list-items2">
+                                    <a href="{{ url_for("views.category", category_id=category.id) }}"
+                                       class="list-item-link">
+                                        <div class="circle bg-primary"></div>
+                                        Default
+                                    </a>
+                                </li>
+                            {% endif %}
                         {% else %}
                             {% if category_id == category.id %}
                                 <li class="nav-item nav-items nav-link list-items2 active">

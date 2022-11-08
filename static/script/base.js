@@ -5,7 +5,10 @@ window.onload = function () {
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
-
+    var toastElList = Array.prototype.slice.call(document.querySelectorAll('.toast'))
+    var toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl)
+    })
 }
 
 window.addEventListener("resize", displayWindowSize);

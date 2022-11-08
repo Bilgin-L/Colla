@@ -1,8 +1,73 @@
+<div class="modal fade" id="addTask">
+    <div class="modal-dialog modal-lg" id="add-container">
+        <div class="modal-content">
+
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Task</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- 模态框内容 -->
+            <form action="{{ url_for("views.add_todo") }}" method="POST">
+                <div class="modal-body">
+                    <div class="row modal-body-row">
+                        <div class="col">
+                            <label for="module-code" class="form-label add-information">Module Code:</label>
+                            <input class="form-control add-input" placeholder="Enter code" id="module-code"
+                                   name="module_code">
+                        </div>
+                        <div class="col">
+                            <label for="module-name-input" class="form-label add-information">Module Name:</label>
+                            <input class="form-control add-input" placeholder="Enter name" id="module-name-input"
+                                   name="module_name_input">
+                        </div>
+                    </div>
+                    <div class="row modal-body-row">
+                        <div class="col">
+                            <label for="assessment_title" class="form-label add-information">Assessment Title:</label>
+                            <input class="form-control add-input" placeholder="Enter title" id="assessment_title"
+                                   name="assessment_title">
+                        </div>
+                    </div>
+                    <div class="row modal-body-row">
+                        <div class="col">
+                            <label for="category" class="form-label add-information">Category:</label>
+                            <select class="form-select add-input" id="category" name="category">
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="due_date" class="form-label add-information">Due Date:</label>
+                            <input class="form-control add-input" type="datetime-local" id="due_date" name="due_date"
+                                   required="required">
+                        </div>
+                    </div>
+                    <div class="row modal-body-row">
+                        <div class="col">
+                            <label for="description" class="form-label add-information">Description:</label>
+                            <textarea class="form-control add-input" rows="3" id="description"
+                                      name="description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Apply</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="center-title-bar">
     <p class="center-title">{{ pagetitle }}</p>
     {% block search %}{% endblock %}
-    <div class="center-progress">
-        <p class="center-progress-title">{{ completed_sum }} / {{ todo_sum }}</p>
+    <div class="center-progress" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Statistic"
+         onclick="openStatistic()">
+        <p class="center-progress-title">Progress: {{ completed_sum }} / {{ todo_sum }}</p>
         <div class="progress" id="progress-bar">
             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
                  style="width:{{ todo_rate }}%"></div>
