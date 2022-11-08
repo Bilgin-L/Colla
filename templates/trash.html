@@ -60,7 +60,19 @@
                                             </tr>
                                             <tr>
                                                 <td class="task-items-title">Priority:</td>
-                                                <td>{{ todo[11] }}</td>
+                                                {% if todo[11] == "Normal" %}
+                                                    <td>{{ todo[11] }}</td>
+                                                {% elif todo[11] == "Important" %}
+                                                    <td style="color: #f4b445">{{ todo[11] }}</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <td class="task-items-title">Status:</td>
+                                                {% if todo[6] == 0 %}
+                                                    <td>Uncompleted</td>
+                                                {% else %}
+                                                    <td style="color: #f4b445">Completed</td>
+                                                {% endif %}
                                             </tr>
                                             <tr>
                                                 <td class="task-items-title">Due Date:</td>
@@ -68,7 +80,11 @@
                                             </tr>
                                             <tr>
                                                 <td class="task-items-title">E-mail Notify:</td>
-                                                <td>{{ todo[8] }}</td>
+                                                {% if todo[8] == "Turn off" %}
+                                                    <td>{{ todo[8] }}</td>
+                                                {% else %}
+                                                    <td style="color: #f4b445">{{ todo[8] }}</td>
+                                                {% endif %}
                                             </tr>
                                             <tr>
                                                 <td class="task-items-title" colspan="2">Description:</td>
@@ -77,7 +93,8 @@
                                                 <td colspan="2">{{ todo[5] }}</td>
                                             </tr>
                                         </table>
-                                        <img class="background" src="{{ url_for("static", filename="image/background_color.png") }}">
+                                        <img class="background"
+                                             src="{{ url_for("static", filename="image/background_color.png") }}">
                                     </div>
                                 </div>
                                 {% if todo[6] == 0 %}

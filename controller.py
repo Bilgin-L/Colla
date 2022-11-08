@@ -170,13 +170,14 @@ def basic_information():
 
 def check_notification():
     user_id = session.get("user_id")
-    todos = TodoModel.query.filter_by(user_id=user_id).all()
+    todos = TodoModel.query.filter_by(user_id=user_id, trash=0).all()
     notification_trigger = 0
     contents_list = []
     # Traverse all todos of the current user
     for todo in todos:
         # If the time of todos is less than 24 hours and the notification is not sent, then send a notification
-        if todo.due_date - datetime.datetime.now() < datetime.timedelta(hours=24) and todo.status_notification == 0:
+        if todo.due_date - datetime.datetime.now() < datetime.timedelta(hours=24) and todo.status_notification == 0 \
+                and todo.status == 0:
             todo.status_notification = 1
             db.session.commit()
             # Generate a notification
