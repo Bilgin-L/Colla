@@ -1,14 +1,10 @@
 window.onload = function () {
-    displayWindowSize();
-    closeAlert();
     var tooltipTriggerList = Array.prototype.slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
-    var toastElList = Array.prototype.slice.call(document.querySelectorAll('.toast'))
-    var toastList = toastElList.map(function (toastEl) {
-        return new bootstrap.Toast(toastEl)
-    })
+    displayWindowSize();
+    closeAlert();
 }
 
 window.addEventListener("resize", displayWindowSize);
@@ -19,23 +15,9 @@ function displayWindowSize() {
     var calender = document.getElementById("calender-chart");
     container.style.height = "calc(100vh - 485px)"
     if (document.body.clientWidth < 750) {
-        // side.style.width = "0px";
-        // side.style.visibility = "hidden";
-        // set the box shadow
-        // side.style.boxShadow = "0px 20px 40px 0px rgb(0 0 0 / 30%)";
-        // container2.style.width = "100vw";
-        // side.style.zIndex = "100";
-        // center.style.width = "90vw";
         add_container.style.width = "96vw";
     } else {
-        // side.style.visibility = "visible";
-        // side.style.boxShadow = "none";
-        // side.style.width = "255px";
-        // side.style.transition = "width .5s ease";
-        // center.style.width = "calc(100vw - 500px)";
-        // container2.style.width = "calc(100vw - 255px)";
         add_container.style.width = "40%";
-        // container2.style.transition = "width .5s ease";
     }
     if (document.body.clientWidth < 995) {
         calender.style.visibility = "hidden";
@@ -55,8 +37,6 @@ function side() {
         side.style.width = "0px";
         container.style.width = "100vw";
     } else {
-        // side.style.transition = "width .5s ease";
-        // side.style.visibility = "visible";
         side.style.width = "255px";
         if (document.body.clientWidth >= 750) {
             container.style.width = "calc(100vw - 255px)";

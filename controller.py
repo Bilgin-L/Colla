@@ -1,3 +1,5 @@
+import calendar
+
 from flask import session, g
 from pyecharts.globals import ThemeType
 
@@ -190,11 +192,29 @@ def check_notification():
 
 
 def pie_chart():
+    user_id = session.get("user_id")
+    # Get all categories in a user
+    categories = CategoryModel.query.filter_by(user_id=user_id).all()
+    # Get all todos in a user
+    todos = TodoModel.query.filter_by(user_id=user_id, trash=0).all()
+    # Get the number of todos in each category
+    category_num = []
+    for category in categories:
+        num = 0
+        for todo in todos:
+            if todo.category_id == category.id:
+                num += 1
+        category_num.append(num)
+    # Get the name of each category
+    category_name = []
+    for category in categories:
+        category_name.append(category.name)
+
     c = (
         Pie(init_opts=opts.InitOpts(width="330px", height="200px"))
         .add(
             "",
-            [list(z) for z in zip(Faker.choose(), Faker.values())],
+            [list(z) for z in zip(category_name, category_num)],
             radius=["40%", "75%"],
             label_opts=opts.LabelOpts(position="center", is_show=False),
         )
@@ -211,6 +231,30 @@ def pie_chart():
 
 
 def bar_chart():
+    user_id = session.get("user_id")
+    # Get all todos in a user
+    todos = TodoModel.query.filter_by(user_id=user_id, trash=0).all()
+    # Get the num of important todos in a user
+    important_num = 0
+    for todo in todos:
+        if todo.important == 1:
+            important_num += 1
+    # Get the num of Today todos in a user
+    today_num = 0
+    for todo in todos:
+        if todo.due_date.date() == datetime.datetime.now().date():
+            today_num += 1
+    # Get the num of Upcoming todos in a user
+    upcoming_num = 0
+    for todo in todos:
+        if todo.due_date.date() > datetime.datetime.now().date():
+            upcoming_num += 1
+    # Get the num of Timeout todos in a user
+    timeout_num = 0
+    for todo in todos:
+        if todo.due_date.date() < datetime.datetime.now().date():
+            timeout_num += 1
+
     c = (
         Bar(init_opts=opts.InitOpts(width="330px", height="200px", theme=ThemeType.LIGHT))
         .add_xaxis(
@@ -221,7 +265,7 @@ def bar_chart():
                 "Timeout",
             ]
         )
-        .add_yaxis("Todos", [10, 20, 30, 40, 50, 40],
+        .add_yaxis("Todos", [important_num, today_num, upcoming_num, timeout_num],
                    label_opts=opts.LabelOpts(position="center", is_show=False),)
         .set_global_opts(
             xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-15)),
@@ -232,13 +276,35 @@ def bar_chart():
 
 
 def calender_chart():
+    # Use calendar to record the number of todos in each day
+    # Get the user id
+    user_id = session.get("user_id")
+    # Get all todos in a user
+    todos = TodoModel.query.filter_by(user_id=user_id, trash=0).all()
+    # Get the number of todos in each day
+    cal = calendar.Calendar()
     year = datetime.datetime.now().year
-    begin = datetime.date(year, 1, 1)
-    end = datetime.date(year, 12, 31)
-    data = [
-        [str(begin + datetime.timedelta(days=i)), random.randint(1000, 25000)]
-        for i in range((end - begin).days + 1)
-    ]
+    # save the data in this format:['date', 'num']
+    data = []
+    # calender_num = []
+    for month in range(1, 13):
+        for day in cal.itermonthdays(year, month):
+            if day != 0:
+                num = 0
+                for todo in todos:
+                    if todo.due_date.date() == datetime.date(year, month, day):
+                        num += 1
+                # calender_num.append(num)
+                data.append([str(year) + "-" + str(month) + "-" + str(day), num])
+
+
+    # begin = datetime.date(year, 1, 1)
+    # end = datetime.date(year, 12, 31)
+    # data = [
+    #     [str(begin + datetime.timedelta(days=i)), random.randint(1000, 25000)]
+    #     for i in range((end - begin).days + 1)
+    # ]
+    print(data)
 
     c = (
         Calendar(init_opts=opts.InitOpts(width="760px", height="250px"))
@@ -255,8 +321,8 @@ def calender_chart():
         )
         .set_global_opts(
             visualmap_opts=opts.VisualMapOpts(
-                max_=20000,
-                min_=500,
+                max_=5,
+                min_=0,
                 orient="horizontal",
                 # is_piecewise=True,
                 # pos_top="230px",
