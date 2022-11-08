@@ -1,5 +1,5 @@
 import wtforms
-from wtforms.validators import length, email, EqualTo, InputRequired
+from wtforms.validators import length, email
 from models import EmailCaptchaModel, UserModel, CategoryModel
 
 

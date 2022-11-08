@@ -54,19 +54,6 @@
     }
 }
 
-/*#side-menu {*/
-/*    z-index: 100;*/
-/*    position: fixed;*/
-/*    display: flex;*/
-/*    width: 255px;*/
-/*    background-color: #FAFAFA;*/
-/*    height: calc(100vh - 44px);*/
-/*    !*transition: width ease .5s;*!*/
-/*    padding-top: 30px;*/
-/*    overflow: hidden;*/
-/*    flex-direction: column;*/
-/*}*/
-
 #search-bar {
     height: 34px;
     width: inherit;
@@ -417,4 +404,10 @@ input {
     width: 760px;
     height: auto;
     margin-top: 20px;
+}
+
+.background{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 }

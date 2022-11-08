@@ -1,6 +1,6 @@
 import calendar
 
-from flask import session, g
+from flask import session
 from pyecharts.globals import ThemeType
 
 from models import UserModel, CategoryModel, NotificationModel, TodoModel
@@ -10,14 +10,12 @@ from datetime import timezone, timedelta
 from extensions import db
 from pyecharts import options as opts
 from pyecharts.charts import Pie, Bar, Calendar
-from pyecharts.faker import Faker
-import random
 
 
 def todos_list(todos):
     todos_total_list = []
     data = []
-    # Add all data in 'todo' in todos to the list
+    # Add all data in 'todos' in todos to the list
     for todo in todos:
         data.append(todo.id)
         data.append(todo.module_code)
@@ -215,12 +213,14 @@ def pie_chart():
         .add(
             "",
             [list(z) for z in zip(category_name, category_num)],
-            radius=["40%", "75%"],
-            label_opts=opts.LabelOpts(position="center", is_show=False),
+            radius=["40%", "70"],
+            label_opts=opts.LabelOpts(position="center",
+                                      is_show=False),
+
         )
         .set_global_opts(
             # title_opts=opts.TitleOpts(title="Category"),
-            legend_opts=opts.LegendOpts(pos_top="20", is_show=False),
+            legend_opts=opts.LegendOpts(pos_top="20px", is_show=False),
         )
         .set_series_opts(
             label_opts=opts.LabelOpts(formatter="{b}: {c}"),
@@ -281,12 +281,9 @@ def calender_chart():
     user_id = session.get("user_id")
     # Get all todos in a user
     todos = TodoModel.query.filter_by(user_id=user_id, trash=0).all()
-    # Get the number of todos in each day
     cal = calendar.Calendar()
     year = datetime.datetime.now().year
-    # save the data in this format:['date', 'num']
     data = []
-    # calender_num = []
     for month in range(1, 13):
         for day in cal.itermonthdays(year, month):
             if day != 0:
@@ -294,17 +291,7 @@ def calender_chart():
                 for todo in todos:
                     if todo.due_date.date() == datetime.date(year, month, day):
                         num += 1
-                # calender_num.append(num)
                 data.append([str(year) + "-" + str(month) + "-" + str(day), num])
-
-
-    # begin = datetime.date(year, 1, 1)
-    # end = datetime.date(year, 12, 31)
-    # data = [
-    #     [str(begin + datetime.timedelta(days=i)), random.randint(1000, 25000)]
-    #     for i in range((end - begin).days + 1)
-    # ]
-    print(data)
 
     c = (
         Calendar(init_opts=opts.InitOpts(width="760px", height="250px"))
@@ -313,7 +300,6 @@ def calender_chart():
             data,
             calendar_opts=opts.CalendarOpts(
                 range_=year,
-                # yearlabel_opts=opts.CalendarYearLabelOpts(is_show=False),
                 pos_right="100px",
                 pos_top="60px",
                 pos_bottom="100px",
@@ -324,9 +310,6 @@ def calender_chart():
                 max_=5,
                 min_=0,
                 orient="horizontal",
-                # is_piecewise=True,
-                # pos_top="230px",
-                # pos_left="100px",
             ),
         )
         .render("static/echarts/calendar_chart.html")

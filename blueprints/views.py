@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session, g, jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, jsonify
 from models import EmailCaptchaModel, UserModel, CategoryModel, TodoModel, NotificationModel
 from .forms import RegisterForm, LoginForm, AddCategoryForm, AddTodoForm
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -210,35 +210,6 @@ def trash():
                            notification_list=notificatons_total_list)
 
 
-@bp.route("/recover_todo", methods=['POST'])
-@login_required
-def recover_todo():
-    todo_id = request.form.get("id")
-    todo = TodoModel.query.get(todo_id)
-    todo.trash = 0
-    db.session.commit()
-    return jsonify({"status": "success"})
-
-
-@bp.route("/delete_todo", methods=['POST'])
-@login_required
-def delete_todo():
-    todo_id = request.form.get("id")
-    todo = TodoModel.query.get(todo_id)
-    db.session.delete(todo)
-    db.session.commit()
-    return jsonify({"status": "success"})
-
-
-@bp.route("/clear_notification", methods=['POST'])
-@login_required
-def clear_notification():
-    user_id = session.get("user_id")
-    # delete all data in the notification table
-    NotificationModel.query.filter_by(user_id=user_id).delete()
-    db.session.commit()
-    return jsonify({"status": "success"})
-
 
 @bp.route("/category/<int:category_id>", methods=['GET', 'POST'])
 @login_required
@@ -314,12 +285,61 @@ def search():
                            pagetitle="Search Result", notification_list=notificatons_total_list)
 
 
+@bp.route("/register", methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template("register.html")
+    else:
+        form = RegisterForm(request.form)
+        if form.validate():
+            email = form.email.data
+            username = form.username.data
+            password = form.password.data
+
+            # encrypt
+            hash_password = generate_password_hash(password)
+            user = UserModel(email=email, username=username, password=hash_password)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("views.login"))
+        else:
+            flash("Failed: The information you entered is not valid!")
+            return redirect(url_for("views.register"))
+
+
+@bp.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        form = LoginForm(request.form)
+        if form.validate():
+            email = form.email.data
+            password = form.password.data
+            user = UserModel.query.filter_by(email=email).first()
+            if user and check_password_hash(user.password, password):
+                session['user_id'] = user.id
+                session['filter'] = "all"
+                session['sort'] = "Duedate"
+                rememverme = request.form.getlist("remember")
+                if "rememberme" in rememverme:
+                    session['remember'] = "true"
+                else:
+                    session['remember'] = "false"
+                return redirect("/")
+            else:
+                flash("Password or email is wrong! ")
+                return redirect(url_for("views.login"))
+        else:
+            flash("The format of email or password is wrong! ")
+            return redirect(url_for("views.login"))
+
+
 @bp.route("/filter", methods=["POST"])
 @login_required
 def filters():
     if request.method == "POST":
         filters_name = request.form.get("filters")
-        # print("filters_name:", filters_name)
         session["filter"] = filters_name
         return redirect(url_for("views.index"))
 
@@ -329,7 +349,6 @@ def filters():
 def sort():
     if request.method == "POST":
         sort_name = request.form.get("sort")
-        # print("filters_name:", filters_name)
         session["sort"] = sort_name
         return redirect(url_for("views.index"))
 
@@ -435,7 +454,6 @@ def add_todo():
         flash("Success: Add a new category: " + assessment_title)
         return redirect(url_for('views.index'))
     else:
-        # flash("Failed: " + error['module_code'][0])
         flash("Failed: " + "You have to fill in the blanks except 'description' !")
         return redirect(url_for('views.index'))
 
@@ -450,7 +468,6 @@ def completed():
     else:
         todo.status = 0
     db.session.commit()
-    # code:200说明是一个成功的正常的请求
     return jsonify({"code": 200})
 
 
@@ -505,28 +522,6 @@ def edit_todo():
         return redirect(url_for('views.index'))
 
 
-@bp.route("/register", methods=['GET', 'POST'])
-def register():
-    if request.method == 'GET':
-        return render_template("register.html")
-    else:
-        form = RegisterForm(request.form)
-        if form.validate():
-            email = form.email.data
-            username = form.username.data
-            password = form.password.data
-
-            # encrypt
-            hash_password = generate_password_hash(password)
-            user = UserModel(email=email, username=username, password=hash_password)
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for("views.login"))
-        else:
-            flash("Failed: The information you entered is not valid!")
-            return redirect(url_for("views.register"))
-
-
 @bp.route("/captcha", methods=['POST'])
 def get_captcha():
     # GET请求
@@ -556,39 +551,9 @@ def get_captcha():
             captcha_model = EmailCaptchaModel(email=email, captcha=captcha)
             db.session.add(captcha_model)
             db.session.commit()
-        # code:200说明是一个成功的正常的请求
         return jsonify({"code": 200})
     else:
-        # code:400 客户端错误
         return jsonify({"code": 400, "message": "Please deliver your e-mail first! "})
-
-
-@bp.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == 'GET':
-        return render_template("login.html")
-    else:
-        form = LoginForm(request.form)
-        if form.validate():
-            email = form.email.data
-            password = form.password.data
-            user = UserModel.query.filter_by(email=email).first()
-            if user and check_password_hash(user.password, password):
-                session['user_id'] = user.id
-                session['filter'] = "all"
-                session['sort'] = "Duedate"
-                rememverme = request.form.getlist("remember")
-                if "rememberme" in rememverme:
-                    session['remember'] = "true"
-                else:
-                    session['remember'] = "false"
-                return redirect("/")
-            else:
-                flash("Password or email is wrong! ")
-                return redirect(url_for("views.login"))
-        else:
-            flash("The format of email or password is wrong! ")
-            return redirect(url_for("views.login"))
 
 
 @bp.route("/logout", methods=['GET'])
@@ -596,3 +561,33 @@ def logout():
     # 清楚session当中所有的数据
     session.clear()
     return redirect(url_for('views.login'))
+
+
+@bp.route("/recover_todo", methods=['POST'])
+@login_required
+def recover_todo():
+    todo_id = request.form.get("id")
+    todo = TodoModel.query.get(todo_id)
+    todo.trash = 0
+    db.session.commit()
+    return jsonify({"status": "success"})
+
+
+@bp.route("/delete_todo", methods=['POST'])
+@login_required
+def delete_todo():
+    todo_id = request.form.get("id")
+    todo = TodoModel.query.get(todo_id)
+    db.session.delete(todo)
+    db.session.commit()
+    return jsonify({"status": "success"})
+
+
+@bp.route("/clear_notification", methods=['POST'])
+@login_required
+def clear_notification():
+    user_id = session.get("user_id")
+    # delete all data in the notification table
+    NotificationModel.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+    return jsonify({"status": "success"})

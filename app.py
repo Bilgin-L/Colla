@@ -22,7 +22,6 @@ def before_request():
         try:
             user = UserModel.query.get(user_id)
             # 给g绑定一个叫做user的变量，他的值是user这个变量
-            # setattr(g, "user", user)
             g.user = user
         except:
             g.user = None

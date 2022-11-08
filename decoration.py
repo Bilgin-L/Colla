@@ -1,4 +1,4 @@
-from flask import g, redirect, url_for, flash
+from flask import g, redirect, url_for
 from functools import wraps
 from models import CategoryModel, TodoModel
 from extensions import db, mail
@@ -7,7 +7,6 @@ from flask_mail import Message
 
 
 def login_required(func):
-    # 这个@wrap装饰器一定不要忘记写了
     @wraps(func)
     def wrapper(*args, **kwargs):
         if hasattr(g, 'user'):
