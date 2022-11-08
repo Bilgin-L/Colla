@@ -15,29 +15,34 @@ window.addEventListener("resize", displayWindowSize);
 
 function displayWindowSize() {
     var container = document.getElementsByClassName("side-list3")[0];
-    var side = document.getElementById("side-menu");
-    var container2 = document.getElementById("container-box");
-    var center = document.getElementById("center-box");
     var add_container = document.getElementById("add-container");
+    var calender = document.getElementById("calender-chart");
     container.style.height = "calc(100vh - 485px)"
     if (document.body.clientWidth < 750) {
-        side.style.width = "0px";
+        // side.style.width = "0px";
         // side.style.visibility = "hidden";
         // set the box shadow
-        side.style.boxShadow = "0px 20px 40px 0px rgb(0 0 0 / 30%)";
-        container2.style.width = "100vw";
-        side.style.zIndex = "100";
-        center.style.width = "90vw";
+        // side.style.boxShadow = "0px 20px 40px 0px rgb(0 0 0 / 30%)";
+        // container2.style.width = "100vw";
+        // side.style.zIndex = "100";
+        // center.style.width = "90vw";
         add_container.style.width = "96vw";
     } else {
-        side.style.visibility = "visible";
-        side.style.boxShadow = "none";
-        side.style.width = "255px";
-        side.style.transition = "width .5s ease";
-        center.style.width = "calc(100vw - 500px)";
-        container2.style.width = "calc(100vw - 255px)";
+        // side.style.visibility = "visible";
+        // side.style.boxShadow = "none";
+        // side.style.width = "255px";
+        // side.style.transition = "width .5s ease";
+        // center.style.width = "calc(100vw - 500px)";
+        // container2.style.width = "calc(100vw - 255px)";
         add_container.style.width = "40%";
-        container2.style.transition = "width .5s ease";
+        // container2.style.transition = "width .5s ease";
+    }
+    if (document.body.clientWidth < 995) {
+        calender.style.visibility = "hidden";
+        calender.style.height = "0px";
+    } else {
+        calender.style.visibility = "visible";
+        calender.style.height = "auto";
     }
 
 }
@@ -45,11 +50,12 @@ function displayWindowSize() {
 function side() {
     var side = document.getElementById("side-menu");
     var container = document.getElementById("container-box");
-    if (side.style.width !== "0px") {
+    const cssSide = window.getComputedStyle(side);
+    if (cssSide.getPropertyValue("width") !== "0px") {
         side.style.width = "0px";
         container.style.width = "100vw";
     } else {
-        side.style.transition = "width .5s ease";
+        // side.style.transition = "width .5s ease";
         // side.style.visibility = "visible";
         side.style.width = "255px";
         if (document.body.clientWidth >= 750) {
@@ -139,4 +145,8 @@ function clearNotification() {
             $(".notification-table").remove();
         }
     })
+}
+
+function openStatistic() {
+    $("#statistic").modal("show");
 }

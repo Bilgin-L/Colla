@@ -18,28 +18,54 @@
     font-size: 28px;
 }
 
-#menu-btn:checked ~ #side-menu {
-    width: 0;
-}
-
 #main-body {
     display: flex;
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
-#side-menu {
-    z-index: 100;
-    position: fixed;
-    display: flex;
-    width: 255px;
-    background-color: #FAFAFA;
-    height: calc(100vh - 44px);
-    /*transition: width ease .5s;*/
-    padding-top: 30px;
-    overflow: hidden;
-    flex-direction: column;
+@media (max-width: 750px) {
+    #side-menu {
+        z-index: 100;
+        position: fixed;
+        display: flex;
+        width: 0px;
+        background-color: #FAFAFA;
+        height: calc(100vh - 44px);
+        transition: width ease .5s;
+        padding-top: 30px;
+        overflow: hidden;
+        flex-direction: column;
+        box-shadow: 0 20px 40px 0 rgb(0 0 0 / 30%);
+    }
 }
+
+@media (min-width: 751px) {
+    #side-menu {
+        position: fixed;
+        display: flex;
+        width: 255px;
+        background-color: #FAFAFA;
+        height: calc(100vh - 44px);
+        transition: width ease .5s;
+        padding-top: 30px;
+        overflow: hidden;
+        flex-direction: column;
+    }
+}
+
+/*#side-menu {*/
+/*    z-index: 100;*/
+/*    position: fixed;*/
+/*    display: flex;*/
+/*    width: 255px;*/
+/*    background-color: #FAFAFA;*/
+/*    height: calc(100vh - 44px);*/
+/*    !*transition: width ease .5s;*!*/
+/*    padding-top: 30px;*/
+/*    overflow: hidden;*/
+/*    flex-direction: column;*/
+/*}*/
 
 #search-bar {
     height: 34px;
@@ -317,7 +343,7 @@ input {
 }
 
 #add-container {
-    width: 40%;
+    width: 96%;
 }
 
 .modal-body-row {
@@ -363,13 +389,32 @@ input {
     height: 100%;
 }
 
-.container-alert{
+.container-alert {
     position: absolute;
     bottom: 0;
     right: 0;
     width: 60%;
     height: 40%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
+}
+
+.pie-chart {
+    width: 330px;
+    height: 220px;
+    margin-top: 20px;
+}
+
+.statistic-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.calender-chart {
+    width: 760px;
+    height: auto;
+    margin-top: 20px;
 }

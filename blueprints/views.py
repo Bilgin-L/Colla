@@ -8,7 +8,8 @@ import string
 import random
 from datetime import datetime
 from decoration import login_required, check_category, email_inform
-from controller import todos_list, progress_bar, get_all_todos, basic_information, notification_list, check_notification
+from controller import todos_list, progress_bar, get_all_todos, basic_information, notification_list, check_notification\
+    , pie_chart, bar_chart, calender_chart
 from sqlalchemy import or_
 
 bp = Blueprint("views", __name__, url_prefix="/")
@@ -46,9 +47,15 @@ def index():
         for content in notification_contents:
             flash(content)
 
+    # function: get the pie chart
+    pie_chart_data = pie_chart()
+    bar_chart_data = bar_chart()
+    calender_data = calender_chart()
+
     return render_template("index.html", user=user, categories=categories, todos=todos, todos_list=todos_total_list,
                            todo_sum=todo_sum, completed_sum=todo_completed, todo_rate=todo_rate, pagetitle="Inbox",
-                           notification_list=notificatons_total_list)
+                           notification_list=notificatons_total_list, pie_chart_data=pie_chart_data,
+                           bar_chart_data=bar_chart_data, calender_data=calender_data)
 
 
 @bp.route("/important", methods=['GET', 'POST'])

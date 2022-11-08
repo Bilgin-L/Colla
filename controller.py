@@ -1,9 +1,16 @@
 from flask import session, g
+from pyecharts.globals import ThemeType
+
 from models import UserModel, CategoryModel, NotificationModel, TodoModel
 import datetime
 from sqlalchemy import extract
 from datetime import timezone, timedelta
 from extensions import db
+from pyecharts import options as opts
+from pyecharts.charts import Pie, Bar, Calendar
+from pyecharts.faker import Faker
+import random
+
 
 def todos_list(todos):
     todos_total_list = []
@@ -101,7 +108,6 @@ def progress_bar(todos):
 
 
 def get_all_todos(todo_model, user_id, filters, sort, attribute, category=None):
-
     SHA_TZ = timezone(
         timedelta(hours=8),
         name='Asia/Shanghai',
@@ -147,7 +153,7 @@ def get_all_todos(todo_model, user_id, filters, sort, attribute, category=None):
         todos = todos.order_by(todo_model.status, todo_model.assessment_name).all()
     elif sort == "Module":
         todos = todos.order_by(todo_model.status, todo_model.module_name).all()
-    
+
     return todos
 
 
@@ -181,3 +187,82 @@ def check_notification():
             notification_trigger = 1
 
     return notification_trigger, contents_list
+
+
+def pie_chart():
+    c = (
+        Pie(init_opts=opts.InitOpts(width="330px", height="200px"))
+        .add(
+            "",
+            [list(z) for z in zip(Faker.choose(), Faker.values())],
+            radius=["40%", "75%"],
+            label_opts=opts.LabelOpts(position="center", is_show=False),
+        )
+        .set_global_opts(
+            # title_opts=opts.TitleOpts(title="Category"),
+            legend_opts=opts.LegendOpts(pos_top="20", is_show=False),
+        )
+        .set_series_opts(
+            label_opts=opts.LabelOpts(formatter="{b}: {c}"),
+        )
+        .render("static/echarts/pie_radius.html")
+    )
+    return c
+
+
+def bar_chart():
+    c = (
+        Bar(init_opts=opts.InitOpts(width="330px", height="200px", theme=ThemeType.LIGHT))
+        .add_xaxis(
+            [
+                "Important",
+                "Today",
+                "Upcoming",
+                "Timeout",
+            ]
+        )
+        .add_yaxis("Todos", [10, 20, 30, 40, 50, 40],
+                   label_opts=opts.LabelOpts(position="center", is_show=False),)
+        .set_global_opts(
+            xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-15)),
+        )
+        .render("static/echarts/bar_chart.html")
+        )
+    return c
+
+
+def calender_chart():
+    year = datetime.datetime.now().year
+    begin = datetime.date(year, 1, 1)
+    end = datetime.date(year, 12, 31)
+    data = [
+        [str(begin + datetime.timedelta(days=i)), random.randint(1000, 25000)]
+        for i in range((end - begin).days + 1)
+    ]
+
+    c = (
+        Calendar(init_opts=opts.InitOpts(width="760px", height="250px"))
+        .add(
+            "",
+            data,
+            calendar_opts=opts.CalendarOpts(
+                range_=year,
+                # yearlabel_opts=opts.CalendarYearLabelOpts(is_show=False),
+                pos_right="100px",
+                pos_top="60px",
+                pos_bottom="100px",
+            ),
+        )
+        .set_global_opts(
+            visualmap_opts=opts.VisualMapOpts(
+                max_=20000,
+                min_=500,
+                orient="horizontal",
+                # is_piecewise=True,
+                # pos_top="230px",
+                # pos_left="100px",
+            ),
+        )
+        .render("static/echarts/calendar_chart.html")
+    )
+    return c
