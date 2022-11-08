@@ -299,8 +299,14 @@ def register():
             # encrypt
             hash_password = generate_password_hash(password)
             user = UserModel(email=email, username=username, password=hash_password)
-            db.session.add(user)
-            db.session.commit()
+            try:
+                db.session.add(user)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+                flash("This email has been registered! ")
+                return redirect(url_for("views.register"))
             return redirect(url_for("views.login"))
         else:
             flash("Failed: The information you entered is not valid!")
@@ -365,8 +371,14 @@ def add_category():
             name = form1.module_name.data
             color = form1.module_color.data
             category = CategoryModel(name=name, user_id=user_id, color=color, create_time=datetime.now())
-            db.session.add(category)
-            db.session.commit()
+            try:
+                db.session.add(category)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+                flash("Failed: This category has been added! ")
+                return redirect(url_for("views.index"))
             contents = "Add a new category: " + name
             # save in the NotificationModel
             notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.now())
@@ -375,8 +387,7 @@ def add_category():
             flash("Success: Add a new category: " + name)
             return redirect(url_for('views.index'))
         else:
-            error = form1.errors
-            flash("Failed: " + error['module_name'][0])
+            flash("Failed: This category has been added! ")
             return redirect(url_for('views.index'))
 
 
@@ -385,8 +396,12 @@ def add_category():
 def delete_category():
     category_id = request.form.get("category_id")
     category = CategoryModel.query.get(category_id)
-    db.session.delete(category)
-    db.session.commit()
+    try:
+        db.session.delete(category)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
     return jsonify({'code': 200, 'message': 'Success'})
 
 
@@ -402,12 +417,20 @@ def edit_category():
         category = CategoryModel.query.get(category_id)
         category.name = name
         category.color = color
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
         contents = "Edit a category: " + name
         # save in the NotificationModel
         notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.now())
-        db.session.add(notification)
-        db.session.commit()
+        try:
+            db.session.add(notification)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
         flash("Success: Edit a category: " + name)
         return redirect(url_for('views.index'))
     else:
@@ -444,13 +467,21 @@ def add_todo():
                          description=description, category_id=category_id, due_date=due_date, important=important,
                          email_inform=mail_notifier, user_id=user_id, create_time=datetime.now(), status=0, trash=0,
                          status_email=0, status_notification=0)
-        db.session.add(todo)
-        db.session.commit()
+        try:
+            db.session.add(todo)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
         contents = "Add a new todo: " + assessment_title
         # save in the NotificationModel
         notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.now())
-        db.session.add(notification)
-        db.session.commit()
+        try:
+            db.session.add(notification)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
         flash("Success: Add a new category: " + assessment_title)
         return redirect(url_for('views.index'))
     else:
@@ -467,7 +498,11 @@ def completed():
         todo.status = 1
     else:
         todo.status = 0
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
     return jsonify({"code": 200})
 
 
@@ -480,7 +515,11 @@ def trash_todo():
         todo.trash = 1
     else:
         todo.trash = 0
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
     return jsonify({"code": 200})
 
 
@@ -509,12 +548,20 @@ def edit_todo():
             todo.important = 0
         # convert the date format from '2022-11-03T00:00' to '2022-11-03 00:00:00'
         todo.due_date = datetime.strptime(todo.due_date, '%Y-%m-%dT%H:%M')
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
         contents = "Edit a todo: " + todo.assessment_name
         # save in the NotificationModel
         notification = NotificationModel(user_id=todo.user_id, content=contents, create_time=datetime.now())
-        db.session.add(notification)
-        db.session.commit()
+        try:
+            db.session.add(notification)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
         flash("Success: Edit a todo: " + todo.assessment_name)
         return redirect(url_for('views.index'))
     else:
@@ -546,7 +593,11 @@ def get_captcha():
         if captcha_model:
             captcha_model.captcha = captcha
             captcha_model.creat_time = datetime.now()
-            db.session.commit()
+            try:
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                raise e
         else:
             captcha_model = EmailCaptchaModel(email=email, captcha=captcha)
             db.session.add(captcha_model)
@@ -569,7 +620,11 @@ def recover_todo():
     todo_id = request.form.get("id")
     todo = TodoModel.query.get(todo_id)
     todo.trash = 0
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
     return jsonify({"status": "success"})
 
 
@@ -578,8 +633,12 @@ def recover_todo():
 def delete_todo():
     todo_id = request.form.get("id")
     todo = TodoModel.query.get(todo_id)
-    db.session.delete(todo)
-    db.session.commit()
+    try:
+        db.session.delete(todo)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
     return jsonify({"status": "success"})
 
 
@@ -589,5 +648,9 @@ def clear_notification():
     user_id = session.get("user_id")
     # delete all data in the notification table
     NotificationModel.query.filter_by(user_id=user_id).delete()
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
     return jsonify({"status": "success"})

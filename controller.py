@@ -2,6 +2,7 @@ import calendar
 
 from flask import session
 from pyecharts.globals import ThemeType
+from sqlalchemy.exc import SQLAlchemyError
 
 from models import UserModel, CategoryModel, NotificationModel, TodoModel
 import datetime
@@ -181,8 +182,12 @@ def check_notification():
             # Generate a notification
             contents = "Your todo '" + todo.assessment_name + "' is due in 24 hours."
             notification = NotificationModel(user_id=user_id, content=contents, create_time=datetime.datetime.now())
-            db.session.add(notification)
-            db.session.commit()
+            try:
+                db.session.add(notification)
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                raise e
             contents_list.append(contents)
             notification_trigger = 1
 
