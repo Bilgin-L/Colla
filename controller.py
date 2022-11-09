@@ -189,9 +189,7 @@ def get_all_todos(todo_model, user_id, filters, sort, attribute, category=None):
                                                                             model_month == today.month,
                                                                             model_day == today.day)
     elif attribute == "upcoming":
-        todos = todo_model.query.filter_by(user_id=user_id, trash=0).filter(model_year >= today.year,
-                                                                            model_month >= today.month,
-                                                                            model_day > today.day)
+        todos = todo_model.query.filter_by(user_id=user_id, trash=0).filter(TodoModel.due_date > today)
     elif attribute == "timeout":
         todos = todo_model.query.filter_by(user_id=user_id, trash=0).filter(todo_model.due_date < today)
 
@@ -354,6 +352,9 @@ def bar_chart():
 
     """
 
+    SHA_TZ = timezone(timedelta(hours=8), name="Asia/Shanghai")
+    today = datetime.datetime.now(SHA_TZ)
+
     # get the current user
     user_id = session.get("user_id")
 
@@ -369,20 +370,20 @@ def bar_chart():
     # Get the num of Today todos in a user
     today_num = 0
     for todo in todos:
-        if todo.due_date.date() == datetime.datetime.now().date():
+        if todo.due_date.date() == today.date():
             today_num += 1
 
     # Get the num of Upcoming todos in a user
+    upcoming = TodoModel.query.filter_by(user_id=user_id, trash=0).filter(TodoModel.due_date > today).all()
     upcoming_num = 0
-    for todo in todos:
-        if todo.due_date.date() > datetime.datetime.now().date():
-            upcoming_num += 1
+    for todo in upcoming:
+        upcoming_num += 1
 
     # Get the num of Timeout todos in a user
+    timeout = TodoModel.query.filter_by(user_id=user_id, trash=0).filter(TodoModel.due_date < today).all()
     timeout_num = 0
-    for todo in todos:
-        if todo.due_date.date() < datetime.datetime.now().date():
-            timeout_num += 1
+    for todo in timeout:
+        timeout_num += 1
 
     c = (
         # Generate a bar chart
