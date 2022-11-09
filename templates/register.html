@@ -8,6 +8,7 @@
     <script src="{{ url_for('static', filename='jquery/jquery_3.5.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='script/register.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap@5.1.1.min.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='image/colla.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <title>Colla - Register</title>
@@ -18,30 +19,34 @@
 </nav>
 <div class="login-bg">
     <div class="login-container">
-    <div class="login-container-decoration"></div>
-    <p class="login-title">Register</p>
-    <form method="POST" action="{{ url_for('views.register') }}">
-        <div class="mb-3 mt-3">
-            <label for="username" class="form-label">Username:</label>
-            <input class="form-control add-input" id="username" placeholder="Enter username" name="username" required>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="e_mail" class="form-label">E-mail:</label>
-            <input type="email" class="form-control add-input" id="e_mail" placeholder="Enter e-mail" name="email" required>
-        </div>
-        <div class="mb-3">
-            <label for="captcha">Captcha</label>
-            <div class="input-group add-input">
-                <input type="text" class="form-control" name="captcha" id="captcha" placeholder="Code" required>
-                <button id="captcha-btn" class="btn btn-outline-secondary input-group-text captcha-btn" type="button">
-                    Send
-                </button>
+        <div class="login-container-decoration"></div>
+        <p class="login-title">Register</p>
+        <form method="POST" action="{{ url_for('views.register') }}">
+            <div class="mb-3 mt-3">
+                <label for="username" class="form-label">Username:</label>
+                <input class="form-control add-input" id="username" placeholder="Enter username" name="username"
+                       required>
             </div>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password:</label>
-            <input type="password" class="form-control add-input" id="password" placeholder="Enter password" name="password" required>
-        </div>
+            <div class="mb-3 mt-3">
+                <label for="e_mail" class="form-label">E-mail:</label>
+                <input type="email" class="form-control add-input" id="e_mail" placeholder="Enter e-mail" name="email"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="captcha">Captcha</label>
+                <div class="input-group add-input">
+                    <input type="text" class="form-control" name="captcha" id="captcha" placeholder="Code" required>
+                    <button id="captcha-btn" class="btn btn-outline-secondary input-group-text captcha-btn"
+                            type="button">
+                        Send
+                    </button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control add-input" id="password" placeholder="Enter password"
+                       name="password" required>
+            </div>
             {% for message in get_flashed_messages() %}
                 <div class="form-group">
                     <div class="text-danger">
@@ -49,10 +54,11 @@
                     </div>
                 </div>
             {% endfor %}
-        <button type="submit" class="login-btn mail-notifier-check">Submit</button>
-        <p class="login-reg">If you have an account, <a href="{{ url_for("views.login") }}" class="login-reg-link">Log in!</a></p>
-    </form>
-</div>
+            <button type="submit" class="login-btn mail-notifier-check">Submit</button>
+            <p class="login-reg">If you have an account, <a href="{{ url_for("views.login") }}" class="login-reg-link">Log
+                in!</a></p>
+        </form>
+    </div>
 </div>
 </body>
 </html>
