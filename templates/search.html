@@ -1,7 +1,17 @@
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+{#// # @file: search.html#}
+{#// # @time: 2022/10/19#}
+{#// # @author: Yuheng Liu#}
+{#// # @email: sc20yl2@leeds.ac.uk && i@bilgin.top #}
+{#// # @organisation: University of Leeds#}
+{#// # @url: colla.bilgin.top#}
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+
 {% extends "base.html" %}
 
 {% block title %}Colla{% endblock %}
 
+{#specific header#}
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
@@ -13,8 +23,13 @@
         <div class="center" id="center-box">
 
             <div class="center-title-bar-search">
+
+                {#                title#}
                 <p class="center-title">{{ pagetitle }}</p>
-                <a class="return-btn" href="{{ url_for("views.index") }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Return">
+
+                {#                return button#}
+                <a class="return-btn" href="{{ url_for("views.index") }}" data-bs-toggle="tooltip"
+                   data-bs-placement="bottom" title="Return">
                     <svg t="1667801524121" class="icon" viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="4372" width="24" height="24">
                         <path d="M548.5 690h0.1c3.6 0 36.1-0.8 69.1-19.4 20.5-11.6 36.9-27.5 48.7-47.3 14.1-23.6 21.2-52.3 21.2-85.1 0-32.7-6.9-61.3-20.7-85-11.5-19.9-27.5-36-47.5-47.9-32.4-19.3-64.5-20.6-68-20.7H440.9v-74.1L331.3 418.7 441 526.1v-71.4h108.9c1.9 0.1 18.2 1.6 33.9 10.9 22.8 13.6 33.9 37.4 33.9 72.7 0 34.1-10.6 57.1-32.5 70.3-17.1 10.3-35.4 11.3-37.2 11.4H404.3v-0.1h-10.7v0.1h-0.3c-19.3 0-35 15.7-35 35s15.7 35 35 35H548.5z"
@@ -27,9 +42,12 @@
 
             <hr>
 
+            {#            title bar#}
             <div class="task-title-bar">
                 <p class="task-title">Todos</p>
                 <div class="task-title-button">
+
+                    {#                    filter#}
                     <div class="dropdown task-title-button2">
                         <button type="button" class="btn btn-primary dropdown-toggle task-title-button3"
                                 data-bs-toggle="dropdown">
@@ -41,6 +59,8 @@
                             <li><a class="dropdown-item" onclick="indexUnCompleted()">Uncompleted</a></li>
                         </ul>
                     </div>
+
+                    {#                    sort#}
                     <div class="dropdown task-title-button2">
                         <button type="button" class="btn btn-primary dropdown-toggle task-title-button3"
                                 data-bs-toggle="dropdown">

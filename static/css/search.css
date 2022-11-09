@@ -1,9 +1,21 @@
+/* ///////////////////////////////////////////////////////////////////////////*/
+/* @file: search.css*/
+/* @time: 2022/10/19*/
+/* @author: Yuheng Liu*/
+/* @email: sc20yl2@leeds.ac.uk && i@bilgin.top*/
+/* @organisation: University of Leeds*/
+/* @url: colla.bilgin.top*/
+/* ///////////////////////////////////////////////////////////////////////////*/
+
+/* ///////////////////////////////////////////////////////////////////////////*/
+/*search title*/
 .center-title-bar-search{
     margin-top: 20px;
     display: flex;
     align-items: center;
 }
 
+/*return button*/
 .return-btn{
     margin-left: 10px;
     height: 35px;
@@ -19,3 +31,4 @@
 .return-btn:hover{
     background-color: #e2e3e5;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/

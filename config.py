@@ -1,11 +1,20 @@
-# 连接sqlite3数据库
+# ///////////////////////////////////////////////////////////////////////////
+# @file: config.py
+# @time: 2022/10/19
+# @author: Yuheng Liu
+# @email: sc20yl2@leeds.ac.uk && i@bilgin.top
+# @organisation: University of Leeds
+# @url: colla.bilgin.top
+# ///////////////////////////////////////////////////////////////////////////
+
+# link to the database
 SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite3'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 # Key information
 SECRET_KEY = "CGBHGCYTGYIHUONHGVTGYHUBHJG"
 
-# 邮箱配置
+# mail server
 MAIL_SERVER = "smtp.qq.com"
 MAIL_PORT = 465
 MAIL_USE_TLS = False

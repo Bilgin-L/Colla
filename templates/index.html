@@ -1,12 +1,23 @@
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+{#// # @file: index.html#}
+{#// # @time: 2022/10/19#}
+{#// # @author: Yuheng Liu#}
+{#// # @email: sc20yl2@leeds.ac.uk && i@bilgin.top #}
+{#// # @organisation: University of Leeds#}
+{#// # @url: colla.bilgin.top#}
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+
 {% extends "base.html" %}
 
 {% block title %}Colla{% endblock %}
 
+{#specific head#}
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <script src="{{ url_for('static', filename='script/index.js') }}"></script>
 {% endblock %}
 
+{#content container#}
 {% block container %}
     <div class="container-box" id="container-box">
         <div class="center" id="center-box">

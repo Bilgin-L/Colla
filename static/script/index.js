@@ -1,3 +1,13 @@
+// # ///////////////////////////////////////////////////////////////////////////
+// # @file: index.js
+// # @time: 2022/10/19
+// # @author: Yuheng Liu
+// # @email: sc20yl2@leeds.ac.uk && i@bilgin.top
+// # @organisation: University of Leeds
+// # @url: colla.bilgin.top
+// # ///////////////////////////////////////////////////////////////////////////
+
+// time counter
 function timeCount(due_date, id) {
     function addZero(i) {
         return i < 10 ? '0' + i : i;
@@ -24,6 +34,7 @@ function timeCount(due_date, id) {
     }
 }
 
+// ajax for marking todo as completed
 function completed(id) {
     $.ajax({
         url: "/completed",
@@ -41,6 +52,7 @@ function completed(id) {
     })
 }
 
+// ajax for deleting todos to trash
 function trashTodo(obj, id) {
     // delete the parent's parent element of the obj
     obj.parentNode.parentNode.remove();
@@ -60,12 +72,13 @@ function trashTodo(obj, id) {
     })
 }
 
+// ajax for filtering todos by all
 function indexAll() {
     $.ajax({
         url: "/filter",
         method: "POST",
         data: {
-            "filters" : "all"
+            "filters": "all"
         },
         success: function () {
             window.location.reload();
@@ -73,12 +86,13 @@ function indexAll() {
     })
 }
 
+// ajax for filtering todos by completed
 function indexCompleted() {
     $.ajax({
         url: "/filter",
         method: "POST",
         data: {
-            "filters" : "completed"
+            "filters": "completed"
         },
         success: function () {
             window.location.reload();
@@ -86,12 +100,13 @@ function indexCompleted() {
     })
 }
 
+// ajax for filtering todos by uncompleted
 function indexUnCompleted() {
     $.ajax({
         url: "/filter",
         method: "POST",
         data: {
-            "filters" : "uncompleted"
+            "filters": "uncompleted"
         },
         success: function () {
             window.location.reload();
@@ -99,12 +114,13 @@ function indexUnCompleted() {
     })
 }
 
-function indexAssessment(){
+// ajax for sorting todos by assessment name
+function indexAssessment() {
     $.ajax({
         url: "/sort",
         method: "POST",
         data: {
-            "sort" : "Assessment"
+            "sort": "Assessment"
         },
         success: function () {
             window.location.reload();
@@ -112,12 +128,13 @@ function indexAssessment(){
     })
 }
 
-function indexModule(){
+// ajax for sorting todos by module name
+function indexModule() {
     $.ajax({
         url: "/sort",
         method: "POST",
         data: {
-            "sort" : "Module"
+            "sort": "Module"
         },
         success: function () {
             window.location.reload();
@@ -125,12 +142,13 @@ function indexModule(){
     })
 }
 
-function indexDuedate(){
+// ajax for sorting todos by due date
+function indexDuedate() {
     $.ajax({
         url: "/sort",
         method: "POST",
         data: {
-            "sort" : "Duedate"
+            "sort": "Duedate"
         },
         success: function () {
             window.location.reload();
@@ -138,12 +156,13 @@ function indexDuedate(){
     })
 }
 
-function indexDateadded(){
+// ajax for sorting todos by date created
+function indexDateadded() {
     $.ajax({
         url: "/sort",
         method: "POST",
         data: {
-            "sort" : "Dateadded"
+            "sort": "Dateadded"
         },
         success: function () {
             window.location.reload();

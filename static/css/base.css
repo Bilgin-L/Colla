@@ -1,3 +1,14 @@
+/* ///////////////////////////////////////////////////////////////////////////*/
+/* @file: base.css*/
+/* @time: 2022/10/19*/
+/* @author: Yuheng Liu*/
+/* @email: sc20yl2@leeds.ac.uk && i@bilgin.top*/
+/* @organisation: University of Leeds*/
+/* @url: colla.bilgin.top*/
+/* ///////////////////////////////////////////////////////////////////////////*/
+
+/* ///////////////////////////////////////////////////////////////////////////*/
+/* navigation bar */
 #nav-bar {
     position: relative !important;
     background-color: #FFB11B !important;
@@ -5,6 +16,14 @@
     align-content: center !important;
 }
 
+.navbar-brand {
+    font-family: "Yellowtail", serif;
+    font-size: 28px;
+}
+/* ///////////////////////////////////////////////////////////////////////////*/
+
+/* ///////////////////////////////////////////////////////////////////////////*/
+/* alert */
 .alert-colla {
     position: absolute;
     z-index: 100;
@@ -12,18 +31,20 @@
     bottom: 10px;
     float: bottom;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
-.navbar-brand {
-    font-family: "Yellowtail", serif;
-    font-size: 28px;
-}
-
+/* ///////////////////////////////////////////////////////////////////////////*/
+/* main body */
 #main-body {
     display: flex;
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/* side menu */
+/*NOTING: There are two different status of side menu, one is for mobile, the other is for desktop.*/
 @media (max-width: 750px) {
     #side-menu {
         z-index: 100;
@@ -53,7 +74,10 @@
         flex-direction: column;
     }
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/* search */
 #search-bar {
     height: 34px;
     width: inherit;
@@ -86,7 +110,10 @@ button[type=button]:focus {
     border-color: unset !important;
     box-shadow: unset !important;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/*side list*/
 #side-list {
     flex-wrap: nowrap;
     margin-left: 20px;
@@ -135,7 +162,10 @@ button[type=button]:focus {
     align-items: center;
     margin-bottom: 7px;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/*notification canvas*/
 .notification {
     width: 300px;
 }
@@ -176,7 +206,10 @@ button[type=button]:focus {
 p {
     margin-bottom: 0 !important;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/*category list*/
 #category_list {
     font-weight: bold;
     font-size: 14px;
@@ -189,7 +222,7 @@ input {
     border: 0;
     outline: none;
 }
-
+/*side title button*/
 .side-title-btn {
     position: absolute;
     right: 0;
@@ -217,6 +250,7 @@ input {
     transition: transform .4s ease;
 }
 
+/*side list*/
 .side-list2 {
     overflow: scroll;
     overflow-x: hidden;
@@ -233,6 +267,7 @@ input {
     bottom: 0;
 }
 
+/*decorations*/
 .circle {
     width: 10px;
     height: 10px;
@@ -253,6 +288,7 @@ input {
     margin-bottom: 5px;
 }
 
+/*hover effect*/
 .list-items2:hover {
     background-color: #EEEEEE !important;
 }
@@ -283,7 +319,9 @@ input {
 .list-items2:hover #delete-btn {
     visibility: visible;
 }
+/*end*/
 
+/*some buttons*/
 #delete-btn {
     visibility: hidden;
     right: 40px;
@@ -298,6 +336,7 @@ input {
     transition: visibility .1s ease;
 }
 
+/*hover effect*/
 #delete-btn:hover {
     background-color: #FAFAFA !important;
 }
@@ -305,7 +344,10 @@ input {
 #edit-btn:hover {
     background-color: #FAFAFA !important;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/*message information*/
 .message-info {
     position: absolute;
     right: 70px;
@@ -332,7 +374,10 @@ input {
 #add-container {
     width: 96%;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/*edit modal*/
 @media screen and (max-width: 750px) {
     .edit-task {
         width: 96%;
@@ -377,7 +422,10 @@ input {
 .dropdown-item:active {
     background-color: #FFB11B;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/
 
+/* ///////////////////////////////////////////////////////////////////////////*/
+/*statistics pannel*/
 .table-margin {
     display: inline-block;
     padding-bottom: 5px;
@@ -423,3 +471,4 @@ input {
     position: absolute;
     bottom: 0;
 }
+/* ///////////////////////////////////////////////////////////////////////////*/

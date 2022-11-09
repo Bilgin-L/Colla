@@ -1,6 +1,18 @@
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+{#// # @file: item_container.html#}
+{#// # @time: 2022/10/19#}
+{#// # @author: Yuheng Liu#}
+{#// # @email: sc20yl2@leeds.ac.uk && i@bilgin.top #}
+{#// # @organisation: University of Leeds#}
+{#// # @url: colla.bilgin.top#}
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+
+{#This is a component for displaying the items in the item list. It is used in the item list component.#}
 <div class="items-container">
     {% for todo in todos_list %}
         <div class="task-items">
+
+            {#            complete or not#}
             <div class="task-items-left">
                 {% if todo[6] == 0 %}
                     <input onclick="completed('{{ todo[0] }}')" class="form-check-input task-items-check"
@@ -11,6 +23,8 @@
                            type="checkbox" id="check1" name="option1"
                            value="something" checked="checked">
                 {% endif %}
+
+                {#            task information#}
                 <div class="task-items-information">
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="details-{{ todo[0] }}"
                          aria-labelledby="offcanvasRightLabel">
@@ -19,6 +33,8 @@
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                                     aria-label="Close"></button>
                         </div>
+
+                        {#                        details canvas#}
                         <div class="offcanvas-body">
                             <table class="task-items-detail">
                                 <tr>
@@ -72,9 +88,14 @@
                                     <td colspan="2">{{ todo[5] }}</td>
                                 </tr>
                             </table>
-                            <img class="background" src="{{ url_for("static", filename="image/background_color.png") }}">
+
+                            {#                        a background image#}
+                            <img class="background"
+                                 src="{{ url_for("static", filename="image/background_color.png") }}">
                         </div>
                     </div>
+
+                    {#                    task items#}
                     {% if todo[6] == 0 %}
                         <a class="task-name" href="#details-{{ todo[0] }}" data-bs-toggle="offcanvas"
                            aria-controls="details">
@@ -90,19 +111,27 @@
                             <p class="task-items-module-title">{{ todo[3] }}</p>
                         </a>
                     {% endif %}
+
+                    {#                task information#}
                     <div class="task-information">
                         {% if todo[6] == 0 %}
                             <div class="task-date">
+
+                                {#                                an icon#}
                                 <svg t="1667198216281" class="icon task-date-svg" viewBox="0 0 1024 1024"
                                      version="1.1"
                                      xmlns="http://www.w3.org/2000/svg" p-id="2533" width="16" height="16">
                                     <path d="M725.333333 170.666667h74.709334C864.853333 170.666667 917.333333 223.189333 917.333333 288.096V799.893333C917.333333 864.757333 864.832 917.333333 800.042667 917.333333H223.957333C159.146667 917.333333 106.666667 864.810667 106.666667 799.904V288.106667C106.666667 223.242667 159.168 170.666667 223.957333 170.666667H298.666667v-32a32 32 0 0 1 64 0v32h298.666666v-32a32 32 0 0 1 64 0v32z m0 64v32a32 32 0 0 1-64 0v-32H362.666667v32a32 32 0 0 1-64 0v-32h-74.709334A53.354667 53.354667 0 0 0 170.666667 288.096V799.893333A53.301333 53.301333 0 0 0 223.957333 853.333333h576.085334A53.354667 53.354667 0 0 0 853.333333 799.904V288.106667A53.301333 53.301333 0 0 0 800.042667 234.666667H725.333333z m-10.666666 224a32 32 0 0 1 0 64H309.333333a32 32 0 0 1 0-64h405.333334zM586.666667 618.666667a32 32 0 0 1 0 64H309.333333a32 32 0 0 1 0-64h277.333334z"
                                           p-id="2534" fill="#FFB11B"></path>
                                 </svg>
+
+                                {#                                date information#}
                                 <p class="task-date-m">{{ todo[15] }}</p>
                                 <p class="task-date-m">{{ todo[14] }}</p>
                                 <p class="task-date-m">·</p>
                                 <p class="task-date-m">{{ todo[13] }}</p>
+
+                                {#                                an icon#}
                                 <svg t="1667199022757" class="icon task-date-svg" viewBox="0 0 1024 1024"
                                      version="1.1"
                                      xmlns="http://www.w3.org/2000/svg" p-id="3669" width="16" height="16">
@@ -111,20 +140,28 @@
                                     <path d="M713.6 556.8H534.4V355.2c0-12.4-10-22.4-22.4-22.4-12.4 0-22.4 10-22.4 22.4V601.6h224c12.3 0 22.4-10.1 22.4-22.4 0-12.3-10.1-22.4-22.4-22.4z"
                                           p-id="3671" fill="#FFB11B"></path>
                                 </svg>
+
+                                {#                                count-down#}
                                 <p class="task-date-m" id="countDown-{{ todo[0] }}"></p>
                             </div>
                         {% else %}
                             <div class="task-date" style="color: #ffe0a1">
+
+                                {#                            an icon#}
                                 <svg t="1667198216281" class="icon task-date-svg" viewBox="0 0 1024 1024"
                                      version="1.1"
                                      xmlns="http://www.w3.org/2000/svg" p-id="2533" width="16" height="16">
                                     <path d="M725.333333 170.666667h74.709334C864.853333 170.666667 917.333333 223.189333 917.333333 288.096V799.893333C917.333333 864.757333 864.832 917.333333 800.042667 917.333333H223.957333C159.146667 917.333333 106.666667 864.810667 106.666667 799.904V288.106667C106.666667 223.242667 159.168 170.666667 223.957333 170.666667H298.666667v-32a32 32 0 0 1 64 0v32h298.666666v-32a32 32 0 0 1 64 0v32z m0 64v32a32 32 0 0 1-64 0v-32H362.666667v32a32 32 0 0 1-64 0v-32h-74.709334A53.354667 53.354667 0 0 0 170.666667 288.096V799.893333A53.301333 53.301333 0 0 0 223.957333 853.333333h576.085334A53.354667 53.354667 0 0 0 853.333333 799.904V288.106667A53.301333 53.301333 0 0 0 800.042667 234.666667H725.333333z m-10.666666 224a32 32 0 0 1 0 64H309.333333a32 32 0 0 1 0-64h405.333334zM586.666667 618.666667a32 32 0 0 1 0 64H309.333333a32 32 0 0 1 0-64h277.333334z"
                                           p-id="2534" fill="#FFB11B"></path>
                                 </svg>
+
+                                {#                                date information#}
                                 <p class="task-date-m">{{ todo[15] }}</p>
                                 <p class="task-date-m">{{ todo[14] }}</p>
                                 <p class="task-date-m">·</p>
                                 <p class="task-date-m">{{ todo[13] }}</p>
+
+                                {#                                an icon#}
                                 <svg t="1667199022757" class="icon task-date-svg" viewBox="0 0 1024 1024"
                                      version="1.1"
                                      xmlns="http://www.w3.org/2000/svg" p-id="3669" width="16" height="16">
@@ -133,13 +170,19 @@
                                     <path d="M713.6 556.8H534.4V355.2c0-12.4-10-22.4-22.4-22.4-12.4 0-22.4 10-22.4 22.4V601.6h224c12.3 0 22.4-10.1 22.4-22.4 0-12.3-10.1-22.4-22.4-22.4z"
                                           p-id="3671" fill="#FFB11B"></path>
                                 </svg>
+
+                                {#                                count down#}
                                 <p class="task-date-m" id="countDown-{{ todo[0] }}"></p>
                             </div>
                         {% endif %}
                     </div>
                 </div>
             </div>
+
+            {#            right part#}
             <div class="task-items-right">
+
+                {#                edit button#}
                 <button type="button" class="task-items-button" id="task-items-edit-btn" data-bs-toggle="modal"
                         data-bs-target="#editTask-{{ todo[0] }}">
                     <svg t="1666173777331" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -150,6 +193,8 @@
                               p-id="11687" fill="#6E6E6E"></path>
                     </svg>
                 </button>
+
+                {#                delete button#}
                 <button onclick="trashTodo(this, {{ todo[0] }})" type="button" class="btn-toggle task-items-button"
                         id="task-items-delete-btn">
                     <svg t="1666173870364" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -160,6 +205,8 @@
                 </button>
             </div>
         </div>
+
+        {#        a script to count down the time#}
         <script>
             timeCount("{{ todo[4] }}", "{{ todo[0] }}");
         </script>

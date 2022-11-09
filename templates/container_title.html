@@ -1,15 +1,26 @@
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+{#// # @file: container_title.html#}
+{#// # @time: 2022/10/19#}
+{#// # @author: Yuheng Liu#}
+{#// # @email: sc20yl2@leeds.ac.uk && i@bilgin.top #}
+{#// # @organisation: University of Leeds#}
+{#// # @url: colla.bilgin.top#}
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+
+{#statistic pannel#}
 <div class="modal fade" id="statistic">
     <div class="modal-dialog modal-lg" id="add-container">
         <div class="modal-content">
 
-            <!-- 模态框头部 -->
+            {#            head#}
             <div class="modal-header">
                 <h4 class="modal-title">Statistic</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <!-- 模态框内容 -->
+            {#            content#}
             <div class="modal-body statistic-body">
+                {#                pie chart#}
                 <div class="pie-chart">
                     <p>Category</p>
                     <iframe src="../static/echarts/pie_radius.html"
@@ -19,6 +30,7 @@
                             frameborder="no">
                     </iframe>
                 </div>
+                {#                bar chart#}
                 <div class="pie-chart">
                     <p>Todos info</p>
                     <iframe src="../static/echarts/bar_chart.html"
@@ -28,6 +40,7 @@
                             frameborder="no">
                     </iframe>
                 </div>
+                {#                calendar#}
                 <div class="calender-chart" id="calender-chart" style="visibility: visible">
                     <p style="margin-left: 23px">Overall</p>
                     <iframe src="../static/echarts/calendar_chart.html"
@@ -38,7 +51,7 @@
                     </iframe>
                 </div>
             </div>
-            <!-- 模态框底部 -->
+            {#            footer#}
             <div class="modal-footer">
                 <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Complete</button>
             </div>
@@ -46,9 +59,11 @@
     </div>
 </div>
 
+{#title bar#}
 <div class="center-title-bar">
     <p class="center-title">{{ pagetitle }}</p>
     {% block search %}{% endblock %}
+    {#    progress bar#}
     <div class="center-progress" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Statistic"
          onclick="openStatistic()">
         <p class="center-progress-title">Progress: {{ completed_sum }} / {{ todo_sum }}</p>
@@ -61,9 +76,12 @@
 
 <hr>
 
+{#title bar#}
 <div class="task-title-bar">
     <p class="task-title">Todos</p>
     <div class="task-title-button">
+
+        {#        filter#}
         <div class="dropdown task-title-button2">
             <button type="button" class="btn btn-primary dropdown-toggle task-title-button3"
                     data-bs-toggle="dropdown">
@@ -75,6 +93,8 @@
                 <li><a class="dropdown-item" onclick="indexUnCompleted()">Uncompleted</a></li>
             </ul>
         </div>
+
+        {#        sort#}
         <div class="dropdown task-title-button2">
             <button type="button" class="btn btn-primary dropdown-toggle task-title-button3"
                     data-bs-toggle="dropdown">

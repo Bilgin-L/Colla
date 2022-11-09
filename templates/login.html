@@ -1,3 +1,12 @@
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+{#// # @file: login.html#}
+{#// # @time: 2022/10/19#}
+{#// # @author: Yuheng Liu#}
+{#// # @email: sc20yl2@leeds.ac.uk && i@bilgin.top #}
+{#// # @organisation: University of Leeds#}
+{#// # @url: colla.bilgin.top#}
+{#// # ///////////////////////////////////////////////////////////////////////////#}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,23 +21,37 @@
     <title>Colla - Login</title>
 </head>
 <body>
+
+{#navigation bar#}
 <nav class="container-fluid navbar navbar-light fixed-top" id="nav-bar" style="justify-content: center;">
     <a class="navbar-brand">Colla</a>
 </nav>
+
+{#login form#}
 <div class="login-bg">
     <div class="login-container">
+
+        {#        yellow decoration#}
         <div class="login-container-decoration"></div>
         <p class="login-title">Login</p>
+
+        {#        a form#}
         <form action="{{ url_for("views.login") }}" method="POST">
+
+            {#            e-mail#}
             <div class="mb-3 mt-3">
                 <label for="email" class="form-label">E-mail:</label>
                 <input class="form-control add-input" id="email" placeholder="Enter email" name="email" required>
             </div>
+
+            {#            password#}
             <div class="mb-3">
                 <label for="password" class="form-label">Password:</label>
                 <input type="password" class="form-control add-input" id="password" placeholder="Enter password"
                        name="password" required>
             </div>
+
+            {#        remember me#}
             <div class="form-check mb-3">
                 <label class="form-check-label">
                     <input class="form-check-input mail-notifier-check" type="checkbox" name="remember"
@@ -36,6 +59,7 @@
                 </label>
             </div>
 
+            {#            flash message#}
             {% for message in get_flashed_messages() %}
                 <div class="form-group">
                     <div class="text-danger">
@@ -44,7 +68,10 @@
                 </div>
             {% endfor %}
 
+            {#            submit button#}
             <button type="submit" class="login-btn mail-notifier-check">Submit</button>
+
+            {#            register#}
             <p class="login-reg">If you don't have an account, <a href="{{ url_for("views.register") }}"
                                                                   class="login-reg-link">register in!</a></p>
         </form>

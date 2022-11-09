@@ -1,3 +1,9 @@
-# Developed by Bilgin
-# Time: 2022/10/13 22:22
+# ///////////////////////////////////////////////////////////////////////////
+# @time: 2022/10/19
+# @author: Yuheng Liu
+# @email: sc20yl2@leeds.ac.uk && i@bilgin.top
+# @organisation: University of Leeds
+# @url: colla.bilgin.top
+# ///////////////////////////////////////////////////////////////////////////
+
 from .views import bp as views_bp

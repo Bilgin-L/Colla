@@ -1,13 +1,23 @@
-function bindCaptchaBtnClick(){
-    $("#captcha-btn").on("click", function (event){
+// # ///////////////////////////////////////////////////////////////////////////
+// # @file: register.js
+// # @time: 2022/10/19
+// # @author: Yuheng Liu
+// # @email: sc20yl2@leeds.ac.uk && i@bilgin.top
+// # @organisation: University of Leeds
+// # @url: colla.bilgin.top
+// # ///////////////////////////////////////////////////////////////////////////
+
+// get the captcha
+function bindCaptchaBtnClick() {
+    $("#captcha-btn").on("click", function (event) {
         var $this = $(this)
         var email = $("input[name='email']").val();
         var username = $("input[name='username']").val();
-        if(!email){
+        if (!email) {
             alert("Colla: Please enter your e-mail first!");
             return;
         }
-        // 通过js发送网络请求：ajax：Async Javascript And XML
+        // Send the request throw js：ajax：Async Javascript And XML
         $.ajax({
             url: "/captcha",
             method: "POST",
@@ -15,27 +25,28 @@ function bindCaptchaBtnClick(){
                 "email": email,
                 "username": username
             },
-            success: function (res){
+            success: function (res) {
                 var code = res['code']
-                if (code === 200){
-                    //取消点击事件
+                if (code === 200) {
+                    // cancel the click event
                     $this.off("click")
-                    //开始倒计时
+                    // start the countdown
                     var countDown = 60;
-                    var timer = setInterval(function (){
-                        if(countDown > 0){
-                            $this.text(countDown+" s")
-                        }else {
+                    var timer = setInterval(function () {
+                        if (countDown > 0) {
+                            $this.text(countDown + " s")
+                        } else {
                             $this.text("Send");
-                            // 重新绑定点击事件
+                            // rebind the click event
                             bindCaptchaBtnClick();
-                            // 如果不需要倒计时了，那么就需要记得清除，否则会一直执行下去
+                            // If the countdown is not needed, it needs to be cleared,
+                            // otherwise it will continue to execute
                             clearInterval(timer)
                         }
                         countDown -= 1;
                     }, 1000)
                     alert("Captcha has been sent to your e-mail!");
-                }else {
+                } else {
                     alert(res['message']);
                 }
             }
@@ -43,8 +54,8 @@ function bindCaptchaBtnClick(){
     })
 }
 
-// 等网页文档所有元素都加载完成后再执行
-$(function (){
-    bindCaptchaBtnClick();
-}
+// wait for the web page to load all elements
+$(function () {
+        bindCaptchaBtnClick();
+    }
 )
