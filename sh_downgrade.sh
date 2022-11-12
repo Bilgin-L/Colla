@@ -1,8 +1,8 @@
 # This script is used to downgrade the database and the tables
 
-export FLASK_APP="../app.py"
+export FLASK_APP="app.py"
 # shellcheck disable=SC2154
-"$env":FLASK_APP = "../app.py"
+"$env":FLASK_APP = "app.py"
 
 echo "[Colla] Downgrading database and tables"
 

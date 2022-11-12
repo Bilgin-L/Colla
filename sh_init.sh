@@ -1,8 +1,8 @@
 # This scripts is used to initialize the database and the tables
 # It just needs to be run once
-export FLASK_APP="../app.py"
+export FLASK_APP="app.py"
 # shellcheck disable=SC2154
-"$env":FLASK_APP = "../app.py"
+"$env":FLASK_APP = "app.py"
 
 echo "[Colla] Initializing database and tables"
 echo "WARNING: This scripts just needs to be run once"
