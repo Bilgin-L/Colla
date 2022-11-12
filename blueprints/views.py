@@ -603,7 +603,6 @@ def add_category():
             except Exception as e:
                 db.session.rollback()
                 print(e)
-                flash("Failed: This category has been added! ")
                 return redirect(url_for("views.index"))
             flash("Success: Add a new category: " + name)
             return redirect(url_for('views.index'))

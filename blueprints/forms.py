@@ -13,6 +13,7 @@ import wtforms
 from wtforms.validators import length, email
 # import models
 from models import EmailCaptchaModel, UserModel, CategoryModel
+from flask import session
 # ///////////////////////////////////////////////////////////////////////////
 
 
@@ -74,8 +75,9 @@ class AddCategoryForm(wtforms.Form):
     module_color = wtforms.StringField(validators=[length(min=1, max=20)])
 
     def validate_module_name(self, field):
+        user_id = session.get("user_id")
         module_name = field.data
-        module_model = CategoryModel.query.filter_by(name=module_name).first()
+        module_model = CategoryModel.query.filter_by(name=module_name, user_id=user_id).first()
         if module_model:
             raise wtforms.ValidationError("This category has been added! ")
 
